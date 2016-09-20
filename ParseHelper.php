@@ -47,12 +47,13 @@ class ParseHelper
 	public static function css2XPath($selector)
 	{
 		$replace = [
+			'\s*,\s*' => '|.//',
 			'\s*>\s*' => '/',
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
 			'\s+' => '//',
-			'\#([^\/]+)' => '[@id = "\1"]',
-			'\.([^\/]+)' => '[contains(concat(" ", @class, " "), " \1 ")]',
+			'\#([^\/|]+)' => '[@id = "\1"]',
+			'\.([^\/|]+)' => '[contains(concat(" ", @class, " "), " \1 ")]',
 			'(^|\/|::)\[' => '\1*[',
 		];
 
@@ -61,5 +62,19 @@ class ParseHelper
 		}
 		
 		return './/'.$selector;
+	}
+
+	public static function innerHtml(DOMNode $element)
+	{
+		if ($element->nodeType === 3)
+			return $element->textContent;
+
+		$html = '';
+
+		foreach ($element->childNodes as $child) {
+			$html .= $element->ownerDocument->saveHTML($child);
+		}
+
+		return $html;
 	}
 }
