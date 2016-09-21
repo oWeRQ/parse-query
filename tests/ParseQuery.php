@@ -40,7 +40,7 @@ foreach ($pq->find('small')->prev() as $node) {
 }
 
 foreach ($pq->find('.item')->filter('.item2') as $node) {
-	var_dump((new ParseQuery($node))->outerHtml());
+	var_dump((new ParseQuery($node))->find('a')->outerHtml());
 }
 
 foreach ($pq->find('.item')->filter('.item2') as $node) {

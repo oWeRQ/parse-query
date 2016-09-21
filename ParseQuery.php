@@ -26,7 +26,11 @@ class ParseQuery implements IteratorAggregate
 		}
 
 		$this->nodes = (array)$nodes;
-		$this->xpath = $xpath;
+
+		if (!$xpath && !empty($nodes))
+			$this->xpath = new DOMXpath(reset($nodes)->ownerDocument);
+		else
+			$this->xpath = $xpath;
 	}
 
 	public static function fetch($url, array $options = [])
@@ -99,10 +103,7 @@ class ParseQuery implements IteratorAggregate
 
 	public function children($selector = null)
 	{
-		if ($selector == null)
-			return $this->xpathQuery('*');
-
-		return $this->xpathQuery(ParseHelper::css2XPath($selector, ''));
+		return $this->xpathQuery($selector ? ParseHelper::css2XPath($selector, '') : '*');
 	}
 
 	public function parent()
