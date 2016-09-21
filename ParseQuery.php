@@ -29,8 +29,8 @@ class ParseQuery implements IteratorAggregate
 
 	public function loadHtml($html)
 	{
-		$this->nodes = [];
 		$this->xpath = ParseHelper::htmlXPath($html);
+		$this->nodes = [$this->xpath->query('.')->item(0)];
 	}
 
 	public function push(DOMNode $node)
@@ -43,8 +43,11 @@ class ParseQuery implements IteratorAggregate
 		return count($this->nodes);
 	}
 
-	public function get($index)
+	public function get($index = null)
 	{
+		if ($index === null)
+			return $this->nodes;
+
 		if (empty($this->nodes) || empty($this->nodes[$index]))
 			return null;
 
@@ -56,66 +59,68 @@ class ParseQuery implements IteratorAggregate
 		return new static(static::get($index), $this->xpath);
 	}
 
-	public function find($selector)
+	public function map($callback)
 	{
-		$result = new static(null, $this->xpath);
-
-		$expression = ParseHelper::css2XPath($selector);
-
-		foreach ($this->nodes ?: [null] as $context) {
-			foreach ($this->xpath->query($expression, $context) as $node) {
-				$result->push($node);
-			}
-		}
-
-		return $result;
+		$result = array_filter(array_map($callback, $this->nodes));
+		return new static($result, $this->xpath);
 	}
 
-	public function children()
+	public function xpathQuery($expression)
 	{
-		$result = new static(null, $this->xpath);
+		$result = [];
 
 		foreach ($this->nodes as $context) {
-			foreach ($context->childNodes as $node) {
-				if ($node->nodeType !== 3) {
-					$result->push($node);
-				}
+			foreach ($this->xpath->query($expression, $context) as $node) {
+				$result[] = $node;
 			}
 		}
 
-		return $result;
+		return new static($result, $this->xpath);
+	}
+
+	public function find($selector)
+	{
+		return $this->xpathQuery(ParseHelper::css2XPath($selector));
+	}
+
+	public function filter($selector)
+	{
+		return $this->xpathQuery(ParseHelper::css2XPath($selector, 'self::'));
+	}
+
+	public function children($selector = null)
+	{
+		if ($selector == null)
+			return $this->xpathQuery('*');
+
+		return $this->xpathQuery(ParseHelper::css2XPath($selector, ''));
+	}
+
+	public function parent()
+	{
+		return $this->map(function($node){
+			return $node->parentNode;
+		});
 	}
 
 	public function prev()
 	{
-		$result = new static(null, $this->xpath);
-
-		foreach ($this->nodes as $node) {
+		return $this->map(function($node){
 			while ($node = $node->previousSibling) {
-				if ($node->nodeType !== 3) {
-					$result->push($node);
-					break;
-				}
+				if ($node->nodeType !== 3)
+					return $node;
 			}
-		}
-
-		return $result;
+		});
 	}
 
 	public function next()
 	{
-		$result = new static(null, $this->xpath);
-
-		foreach ($this->nodes as $node) {
+		return $this->map(function($node){
 			while ($node = $node->nextSibling) {
-				if ($node->nodeType !== 3) {
-					$result->push($node);
-					break;
-				}
+				if ($node->nodeType !== 3)
+					return $node;
 			}
-		}
-
-		return $result;
+		});
 	}
 
 	public function prop($name)

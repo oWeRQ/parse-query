@@ -38,3 +38,7 @@ foreach ($pq->find('.item > a')->next() as $node) {
 foreach ($pq->find('small')->prev() as $node) {
 	var_dump((new ParseQuery($node))->outerHtml());
 }
+
+foreach ($pq->find('.item')->filter('.item2') as $node) {
+	var_dump((new ParseQuery($node))->outerHtml());
+}
