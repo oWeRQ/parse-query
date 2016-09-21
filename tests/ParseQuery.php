@@ -30,3 +30,11 @@ foreach ($pq->find('.item1, .item3')->find('a') as $node) {
 foreach ($pq->find('#list')->children() as $node) {
 	var_dump((new ParseQuery($node))->html());
 }
+
+foreach ($pq->find('.item > a')->next() as $node) {
+	var_dump((new ParseQuery($node))->outerHtml());
+}
+
+foreach ($pq->find('small')->prev() as $node) {
+	var_dump((new ParseQuery($node))->outerHtml());
+}
