@@ -148,7 +148,7 @@ class ParseHelper
 		return new DOMXpath($doc);
 	}
 
-	public static function css2XPath($selector, $context = './/')
+	public static function css2XPath($selector, $context = 'descendant::')
 	{
 		$selector = $context.trim($selector);
 

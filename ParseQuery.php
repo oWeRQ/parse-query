@@ -8,13 +8,22 @@ class ParseQuery implements IteratorAggregate
 	protected $xpath;
 
 	public function getIterator() {
-		return new ArrayIterator($this->nodes);
+		$nodes = [];
+
+		foreach ($this->nodes as $node) {
+			$nodes[] = new static($node, $this->xpath);
+		}
+
+		return new ArrayIterator($nodes);
 	}
 
 	public function __construct($nodes = null, $xpath = null)
 	{
-		if (is_object($nodes))
+		if ($nodes instanceof static) {
+			$nodes = $nodes->get();
+		} elseif (is_object($nodes)) {
 			$nodes = [$nodes];
+		}
 
 		$this->nodes = (array)$nodes;
 		$this->xpath = $xpath;
@@ -130,7 +139,7 @@ class ParseQuery implements IteratorAggregate
 
 	public function attr($name)
 	{
-		return ($node = $this->get(0)) ? (string)$node[$name] : null;
+		return ($node = $this->get(0)) ? $node->getAttribute($name) : null;
 	}
 
 	public function text()
