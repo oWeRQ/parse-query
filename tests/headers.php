@@ -9,5 +9,8 @@ $tests = [
 ];
 
 foreach ($tests as $headers) {
-	var_dump(ParseHelper::headers($headers));
+	$buildHeaders = ParseHelper::buildHeaders($headers);
+	$parseHeaders = ParseHelper::parseHeaders($buildHeaders);
+	var_dump($buildHeaders);
+	var_dump($parseHeaders);
 }
