@@ -90,8 +90,7 @@ class ParseQuery implements IteratorAggregate
 	{
 		$result = new static(null, $this->xpath);
 
-		foreach ($this->nodes as $context) {
-			$node = $context;
+		foreach ($this->nodes as $node) {
 			while ($node = $node->previousSibling) {
 				if ($node->nodeType !== 3) {
 					$result->push($node);
@@ -107,8 +106,7 @@ class ParseQuery implements IteratorAggregate
 	{
 		$result = new static(null, $this->xpath);
 
-		foreach ($this->nodes as $context) {
-			$node = $context;
+		foreach ($this->nodes as $node) {
 			while ($node = $node->nextSibling) {
 				if ($node->nodeType !== 3) {
 					$result->push($node);
@@ -122,26 +120,26 @@ class ParseQuery implements IteratorAggregate
 
 	public function prop($name)
 	{
-		return empty($this->nodes) ? null : $this->nodes[0]->$name;
+		return ($node = $this->get(0)) ? $node->$name : null;
 	}
 
 	public function attr($name)
 	{
-		return empty($this->nodes) ? null : (string)$this->nodes[0][$name];
+		return ($node = $this->get(0)) ? (string)$node[$name] : null;
 	}
 
 	public function text()
 	{
-		return empty($this->nodes) ? null : $this->nodes[0]->textContent;
+		return ($node = $this->get(0)) ? $node->textContent : null;
 	}
 
 	public function html()
 	{
-		return empty($this->nodes) ? null : ParseHelper::innerHtml($this->nodes[0]);
+		return ($node = $this->get(0)) ? ParseHelper::innerHtml($node) : null;
 	}
 
 	public function outerHtml()
 	{
-		return empty($this->nodes) ? null : $this->nodes[0]->ownerDocument->saveHTML($this->nodes[0]);
+		return ($node = $this->get(0)) ? $node->ownerDocument->saveHTML($node) : null;
 	}
 }
