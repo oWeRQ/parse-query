@@ -40,28 +40,29 @@ class ParseHelper
 		$doc = new DOMDocument();
 		@$doc->loadHTML($html);
 
-		$xpath = new DOMXpath($doc);
-		return $xpath;
+		return new DOMXpath($doc);
 	}
 
-	public static function css2XPath($selector)
+	public static function css2XPath($selector, $context = './/')
 	{
+		$selector = $context.trim($selector);
+
 		$replace = [
-			'\s*,\s*' => '|.//',
+			'\s*,\s*' => '|'.$context,
 			'\s*>\s*' => '/',
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
 			'\s+' => '//',
-			'\#([^\/|]+)' => '[@id = "\1"]',
-			'\.([^\/|]+)' => '[contains(concat(" ", @class, " "), " \1 ")]',
-			'(^|\/|::)\[' => '\1*[',
+			'\#([^\/|.]+)' => '[@id = "\1"]',
+			'\.([^\/|#]+)' => '[contains(concat(" ", @class, " "), " \1 ")]',
+			'(^|\/|::|\|)\[' => '\1*[',
 		];
 
 		foreach ($replace as $pattern => $replacement) {
 			$selector = preg_replace("/$pattern/", $replacement, $selector);
 		}
 		
-		return './/'.$selector;
+		return $selector;
 	}
 
 	public static function innerHtml(DOMNode $element)

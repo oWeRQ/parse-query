@@ -6,6 +6,8 @@ $tests = [
 	'#id .class > div' => '',
 	'h1 + p' => '',
 	'h2 ~ p' => '',
+	'div, span' => '',
+	'#id.class input' => '',
 ];
 
 foreach ($tests as $selector => $xpath) {
