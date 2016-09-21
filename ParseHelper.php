@@ -46,8 +46,49 @@ class ParseHelper
 		return $headers;
 	}
 
+	public static function cacheDir()
+	{
+		$dirname = 'cache/';
+
+		if (!file_exists($dirname)) {
+			mkdir($dirname);
+		}
+
+		return $dirname;
+	}
+
+	public static function cacheGet($name, $type = 'default', $time = 3600)
+	{
+		if ($type === 'no-cache')
+			return false;
+
+		$filename = static::cacheDir().$name.'.json';
+
+		if (file_exists($filename) && ($type === 'force-cache' || filemtime($filename) > time() - $time)) {
+			return json_decode(file_get_contents($filename), true);
+		}
+
+		return false;
+	}
+
+	public static function cachePut($name, $data, $type = 'default')
+	{
+		if ($type === 'no-cache')
+			return;
+
+		$filename = static::cacheDir().$name.'.json';
+
+		file_put_contents($filename, json_encode($data));
+	}
+
 	public static function fetch($url, array $options = [])
 	{
+		$name = md5($url).'.'.md5(json_encode($options));
+		$cache = (isset($options['cache']) ? $options['cache'] : 'default');
+
+		if (($response = static::cacheGet($name, $cache)) !== false)
+			return (object)$response;
+
 		$http = (isset($options['http']) && is_array($options['http']) ? $options['http'] : []);
 
 		$http['method'] = (isset($options['method']) ? strtoupper($options['method']) : 'GET');
@@ -62,25 +103,39 @@ class ParseHelper
 			'http' => $http,
 		]);
 
-		$response = file_get_contents($url, false, $context);
+		$text = file_get_contents($url, false, $context);
 		$headers = static::parseHeaders($http_response_header);
+		preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', array_shift($headers), $status);
 
-		preg_match('/^HTTP\/(\d+\.\d+) (\d+)\s*(.*)$/', array_shift($headers), $matches);
-		$status = [
-			'version' => $matches[1],
-			'code' => $matches[2],
-			'message' => $matches[3],
+		$response = [
+			'status' => $status[1],
+			'statusText' => $status[2],
+			'headers' => $headers,
+			'text' => $text,
 		];
 
-		if (isset($options['charset'])) {
-			$charset = $options['charset'];
-		} elseif (isset($headers['Content-Type']) && preg_match('/charset=([-\w]+)/', $headers['Content-Type'], $matches)) {
-			$charset = $matches[1];
-		} else {
-			return $response;
+		$charset = null;
+
+		if (isset($headers['Content-Type']) && preg_match('/^([^;]+)(; charset=([-\w]+))?/', $headers['Content-Type'], $matches)) {
+			$response['contentType'] = $matches[1];
+			$response['charset'] = $matches[3];
+
+			if ($response['contentType'] === 'application/json') {
+				$response['json'] = json_decode($response['text'], true);
+			}
 		}
 
-		return mb_convert_encoding($response, mb_internal_encoding(), $charset);
+		if (isset($options['charset'])) {
+			$response['charset'] = $options['charset'];
+		}
+
+		if ($response['charset']) {
+			$response['text'] = mb_convert_encoding($response['text'], mb_internal_encoding(), $response['charset']);
+		}
+
+		static::cachePut($name, $response, $cache);
+
+		return (object)$response;
 	}
 
 	public static function htmlXPath($html)

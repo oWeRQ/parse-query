@@ -23,7 +23,7 @@ class ParseQuery implements IteratorAggregate
 	public static function fetch($url, array $options = [])
 	{
 		$instance = new static;
-		$instance->loadHtml(ParseHelper::fetch($url, $options));
+		$instance->loadHtml(ParseHelper::fetch($url, $options)->text);
 		return $instance;
 	}
 
