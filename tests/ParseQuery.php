@@ -23,28 +23,23 @@ $pq->loadHtml(
 HTML
 );
 
-foreach ($pq->find('.item1, .item3')->find('a') as $node) {
-	var_dump($node->html());
-}
-
-foreach ($pq->find('#list')->children() as $node) {
-	var_dump($node->html());
-}
-
-foreach ($pq->find('.item > a')->next() as $node) {
-	var_dump($node->outerHtml());
-}
-
-foreach ($pq->find('small')->prev() as $node) {
-	var_dump($node->outerHtml());
-}
-
-foreach ($pq->find('.item')->filter('.item2') as $node) {
-	var_dump((new ParseQuery($node))->find('a')->outerHtml());
-}
-
-foreach ($pq->find('.item')->filter('.item2') as $node) {
-	foreach ($node->find('a') as $a) {
-		var_dump($a->attr('href'));
+function dump($nodes, $method = 'outerHtml', $params = [])
+{
+	foreach ($nodes as $node) {
+		echo "\"".call_user_func_array([$node, $method], $params)."\"\n";
 	}
+	echo "====\n";
+}
+
+dump($pq->find('.item1, .item3')->find('a'), 'html');
+dump($pq->find('#list')->children(), 'html');
+dump($pq->find('.item > a')->next(), 'outerHtml');
+dump($pq->find('small')->prev(), 'outerHtml');
+
+foreach ($pq->find('.item')->filter('.item2') as $node) {
+	dump((new ParseQuery($node))->find('a'), 'outerHtml');
+}
+
+foreach ($pq->find('.item')->filter('.item2') as $node) {
+	dump($node->find('a'), 'attr', ['href']);
 }
