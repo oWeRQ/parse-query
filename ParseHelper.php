@@ -153,18 +153,21 @@ class ParseHelper
 		$selector = $context.trim($selector);
 		$holders = [];
 
-		$attr = '/\[\s*([-_\w]+)\s*([~|^$*]?=)\s*[\'"]?([^\]\'"]*)[\'"]?\s*\]/';
-		$selector = preg_replace_callback($attr, function($m) use(&$holders){
-			if ($m[2] === '=') $value = "[@{$m[1]}=\"{$m[3]}\"]";
-			elseif ($m[2] === '~=') $value = "[contains(concat(\" \", @{$m[1]}, \" \"), \" {$m[3]} \")]";
-			elseif ($m[2] === '^=') $value = "[starts-with(@{$m[1]}, \"{$m[3]}\")]";
-			elseif ($m[2] === '$=') $value = "[ends-with(@{$m[1]}, \"{$m[3]}\")]";
-			elseif ($m[2] === '*=') $value = "[contains(@{$m[1]}, \"{$m[3]}\")]";
-			else $value = '';
+		$conditionRegex = '/\[\s*([-_\w]+)\s*(?:([~|^$*]?=)\s*[\'"]?([^\]\'"]*)[\'"]?\s*)?\]/';
+		$selector = preg_replace_callback($conditionRegex, function($match) use(&$holders){
+			list($condition, $attr, $op, $value) = $match + [2 => null, 3 => null];
 
-			$key = '{'.count($holders).'}';
-			$holders[$key] = $value;
-			return $key;
+			if ($op === '=') $alt = "[@$attr=\"$value\"]";
+			elseif ($op === '~=') $alt = "[contains(concat(\" \",@$attr,\" \"),\" $value \")]";
+			elseif ($op === '^=') $alt = "[starts-with(@$attr,\"$value\")]";
+			elseif ($op === '$=') $alt = "[ends-with(@$attr,\"$value\")]";
+			elseif ($op === '*=') $alt = "[contains(@$attr,\"$value\")]";
+			elseif ($op === null) $alt = is_numeric($attr) ? "[$attr]" : "[@$attr]";
+			else $alt = $condition;
+
+			$holder = '{'.count($holders).'}';
+			$holders[$holder] = $alt;
+			return $holder;
 		}, $selector);
 
 		$replace = [
@@ -174,7 +177,7 @@ class ParseHelper
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
 			'\s+' => '//',
 			'\#([^\/|.]+)' => '[@id="\1"]',
-			'\.([^\/|#]+)' => '[contains(concat(" ", @class, " "), " \1 ")]',
+			'\.([^\/|#]+)' => '[contains(concat(" ",@class," ")," \1 ")]',
 			'(^|\/|::|\|)([^*\/\w])' => '\1*\2',
 		];
 
