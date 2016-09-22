@@ -152,6 +152,27 @@ class ParseHelper
 	{
 		$selector = $context.trim($selector);
 
+		$holders = [];
+
+		$attr = '/\[\s*([-_\w]+)\s*([~|^$*]?=)\s*[\'"]?([^\]\'"]*)[\'"]?\s*\]/';
+		$selector = preg_replace_callback($attr, function($m) use(&$holders){
+			if ($m[2] === '=') {
+				$holders[] = "[@{$m[1]}=\"{$m[3]}\"]";
+			} elseif ($m[2] === '~=') {
+				$holders[] = "[contains(concat(\" \", @{$m[1]}, \" \"), \" {$m[3]} \")]";
+			} elseif ($m[2] === '^=') {
+				$holders[] = "[starts-with(@{$m[1]}, \"{$m[3]}\")]";
+			} elseif ($m[2] === '$=') {
+				$holders[] = "[ends-with(@{$m[1]}, \"{$m[3]}\")]";
+			} elseif ($m[2] === '*=') {
+				$holders[] = "[contains(@{$m[1]}, \"{$m[3]}\")]";
+			} else {
+				$holders[] = '';
+			}
+
+			return '{'.(count($holders) - 1).'}';
+		}, $selector);
+
 		$replace = [
 			'\s*,\s*' => '|'.$context,
 			'\s*>\s*' => '/',
@@ -165,6 +186,10 @@ class ParseHelper
 
 		foreach ($replace as $pattern => $replacement) {
 			$selector = preg_replace("/$pattern/", $replacement, $selector);
+		}
+
+		foreach ($holders as $key => $value) {
+			$selector = str_replace('{'.$key.'}', $value, $selector);
 		}
 		
 		return $selector;

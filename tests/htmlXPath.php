@@ -17,6 +17,11 @@ $html = <<<HTML
 		<small><a href="#3.1">sublink3.1</a></small>
 	</span>
 </div>
+<form action="https://www.google.ru/search">
+	<input type="hidden" name="start" value="0">
+	<input type="text" name="q" value="test">
+	<input type="submit" value="Search">
+</form>
 HTML;
 
 $xpath = ParseHelper::htmlXPath($html);
@@ -26,6 +31,8 @@ $selectors = [
 	'.item1 ~ *',
 	'.item1 > a ~ *',
 	'.item1 ~ .item3',
+	'input[type=text]',
+	'input[type ~= "submit"]',
 ];
 
 foreach ($selectors as $selector) {
