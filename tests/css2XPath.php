@@ -8,7 +8,7 @@ $tests = [
 	'h2 ~ p' => '',
 	'div, span' => '',
 	'#id.class input' => '',
-	'input[type=text], [type="submit"]' => '',
+	'input[type=text], [type ~= "submit"]' => '',
 ];
 
 foreach ($tests as $selector => $xpath) {
