@@ -24,7 +24,7 @@ $tests = [
 	'input[type]' => 'descendant::input[@type]',
 	'input[  type  ]' => 'descendant::input[@type]',
 	'input[type=text]' => 'descendant::input[@type="text"]',
-	'input[  type  =  "text"  ]' => 'descendant::input[@type="text"]',
+	'input[  type  =  "  text  "  ]' => 'descendant::input[@type="  text  "]',
 	'input[class~=text]' => 'descendant::input[contains(concat(" ",@class," ")," text ")]',
 	'input[class^=text]' => 'descendant::input[starts-with(@class,"text")]',
 	'input[class$=text]' => 'descendant::input[ends-with(@class,"text")]',
