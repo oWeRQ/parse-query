@@ -119,18 +119,22 @@ class ParseHelper
 		if (isset($headers['Content-Type']) && preg_match('/^([^;]+)(; charset=([-\w]+))?/', $headers['Content-Type'], $matches)) {
 			$response['contentType'] = $matches[1];
 			$response['charset'] = $matches[3];
+		}
 
-			if ($response['contentType'] === 'application/json') {
-				$response['json'] = json_decode($response['text'], true);
-			}
+		if (isset($options['contentType'])) {
+			$response['contentType'] = $options['contentType'];
 		}
 
 		if (isset($options['charset'])) {
 			$response['charset'] = $options['charset'];
 		}
 
-		if ($response['charset']) {
+		if (isset($response['charset'])) {
 			$response['text'] = mb_convert_encoding($response['text'], mb_internal_encoding(), $response['charset']);
+		}
+
+		if (isset($response['contentType']) && $response['contentType'] === 'application/json') {
+			$response['json'] = json_decode($response['text'], true);
 		}
 
 		static::cachePut($name, $response, $cache);
