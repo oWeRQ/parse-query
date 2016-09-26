@@ -152,27 +152,40 @@ class ParseHelper
 		return new DOMXpath($doc);
 	}
 
+	public static function css2XPathConditions($selector, &$holders)
+	{
+		$pattern = implode('\s*', [
+			'\[',
+			'([-_\w]+)', // attr
+			'(?:([~|^$*]?=)', // op
+			'([\'"]?)([^\]\'"]*)\3', // quote and value
+			')?\]',
+		]);
+
+		$selector = preg_replace_callback("/$pattern/", function($match) use(&$holders){
+			list($cond, $attr, $op, $quote, $value) = $match + array_fill(0, 5, null);
+
+			if ($op === '=') $cond = "[@$attr=\"$value\"]";
+			elseif ($op === '~=') $cond = "[contains(concat(\" \",@$attr,\" \"),\" $value \")]";
+			elseif ($op === '^=') $cond = "[starts-with(@$attr,\"$value\")]";
+			elseif ($op === '$=') $cond = "[ends-with(@$attr,\"$value\")]";
+			elseif ($op === '*=') $cond = "[contains(@$attr,\"$value\")]";
+			elseif ($op === null) $cond = is_numeric($attr) ? "[$attr]" : "[@$attr]";
+
+			$holder = '{'.count($holders).'}';
+			$holders[$holder] = $cond;
+			return $holder;
+		}, $selector);
+
+		return $selector;
+	}
+
 	public static function css2XPath($selector, $context = 'descendant::')
 	{
 		$selector = $context.trim($selector);
 		$holders = [];
 
-		$conditionRegex = '/\[\s*([-_\w]+)\s*(?:([~|^$*]?=)\s*[\'"]?([^\]\'"]*)[\'"]?\s*)?\]/';
-		$selector = preg_replace_callback($conditionRegex, function($match) use(&$holders){
-			list($condition, $attr, $op, $value) = $match + [2 => null, 3 => null];
-
-			if ($op === '=') $alt = "[@$attr=\"$value\"]";
-			elseif ($op === '~=') $alt = "[contains(concat(\" \",@$attr,\" \"),\" $value \")]";
-			elseif ($op === '^=') $alt = "[starts-with(@$attr,\"$value\")]";
-			elseif ($op === '$=') $alt = "[ends-with(@$attr,\"$value\")]";
-			elseif ($op === '*=') $alt = "[contains(@$attr,\"$value\")]";
-			elseif ($op === null) $alt = is_numeric($attr) ? "[$attr]" : "[@$attr]";
-			else $alt = $condition;
-
-			$holder = '{'.count($holders).'}';
-			$holders[$holder] = $alt;
-			return $holder;
-		}, $selector);
+		$selector = static::css2XPathConditions($selector, $holders);
 
 		$replace = [
 			'\s*,\s*' => '|'.$context,
@@ -180,8 +193,8 @@ class ParseHelper
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
 			'\s+' => '//',
-			'\#([^\/|.]+)' => '[@id="\1"]',
-			'\.([^\/|#]+)' => '[contains(concat(" ",@class," ")," \1 ")]',
+			'\#([^\/|{.]+)' => '[@id="\1"]',
+			'\.([^\/|{#]+)' => '[contains(concat(" ",@class," ")," \1 ")]',
 			'(^|\/|::|\|)([^*\/\w])' => '\1*\2',
 		];
 
