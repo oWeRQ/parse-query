@@ -2,9 +2,7 @@
 
 require_once '../ParseQuery.php';
 
-$pq = new ParseQuery;
-
-$pq->loadHtml(
+$pq = ParseQuery::loadHtml(
 <<<HTML
 <div id="list">
 	<span class="item item1">
