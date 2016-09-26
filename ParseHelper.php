@@ -156,7 +156,7 @@ class ParseHelper
 	{
 		$pattern = implode('\s*', [
 			'\[',
-			'([-_\w]+)', // attr
+			'([-+_\w()]+)', // attr
 			'(?:([~|^$*]?=)', // op
 			'([\'"]?)([^\]\'"]*)\3', // quote and value
 			')?\]',
@@ -165,12 +165,18 @@ class ParseHelper
 		$selector = preg_replace_callback("/$pattern/", function($match) use(&$holders){
 			list($cond, $attr, $op, $quote, $value) = $match + array_fill(0, 5, null);
 
-			if ($op === '=') $cond = "[@$attr=\"$value\"]";
-			elseif ($op === '~=') $cond = "[contains(concat(\" \",@$attr,\" \"),\" $value \")]";
-			elseif ($op === '^=') $cond = "[starts-with(@$attr,\"$value\")]";
-			elseif ($op === '$=') $cond = "[ends-with(@$attr,\"$value\")]";
-			elseif ($op === '*=') $cond = "[contains(@$attr,\"$value\")]";
-			elseif ($op === null) $cond = is_numeric($attr) ? "[$attr]" : "[@$attr]";
+			if (!is_numeric($attr) && strpos($attr, '(') === false) {
+				$attr = '@'.$attr;
+			}
+
+			$value = '"'.$value.'"';
+
+			if ($op === null) $cond = "[$attr]";
+			elseif ($op === '=') $cond = "[$attr=$value]";
+			elseif ($op === '~=') $cond = "[contains(concat(' ',$attr,' '),concat(' ',$value,' '))]";
+			elseif ($op === '^=') $cond = "[starts-with($attr,$value)]";
+			elseif ($op === '$=') $cond = "[ends-with($attr,$value)]";
+			elseif ($op === '*=') $cond = "[contains($attr,$value)]";
 
 			$holder = '{'.count($holders).'}';
 			$holders[$holder] = $cond;
