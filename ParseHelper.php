@@ -124,7 +124,7 @@ class ParseHelper
 
 		preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', array_shift($response['headers']), $status);
 		if (count($status) > 2) {
-			list($response['status'], $response['statusText']) = $status;
+			list(, $response['status'], $response['statusText']) = $status;
 		}
 
 		if (isset($response['headers']['Content-Type']) && is_array($response['headers']['Content-Type'])) {
