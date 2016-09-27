@@ -2,7 +2,7 @@
 
 require_once '../ParseQuery.php';
 
-$pq = ParseQuery::loadHtml(
+$html = ParseQuery::loadHtml(
 <<<HTML
 <div id="list">
 	<span class="item item1">
@@ -23,21 +23,65 @@ HTML
 
 function dump($nodes, $method = 'outerHtml', $params = [])
 {
+	$ret = '';
 	foreach ($nodes as $node) {
-		echo "\"".call_user_func_array([$node, $method], $params)."\"\n";
+		$ret .= "\"".call_user_func_array([$node, $method], $params)."\"\n";
 	}
-	echo "====\n";
+	return $ret."====\n";
 }
 
-dump($pq->find('.item1, .item3')->find('a'), 'html');
-dump($pq->find('#list')->children(), 'html');
-dump($pq->find('.item > a')->next(), 'outerHtml');
-dump($pq->find('small')->prev(), 'outerHtml');
-
-foreach ($pq->find('.item')->filter('.item2') as $node) {
-	dump((new ParseQuery($node))->find('a'), 'outerHtml');
+function assert_length($nodes, $expect)
+{
+	$length = $nodes->length();
+	assert($length === $expect, "expect $expect, return $length nodes:\n".dump($nodes));
 }
 
-foreach ($pq->find('.item')->filter('.item2') as $node) {
-	dump($node->find('a'), 'attr', ['href']);
-}
+// find
+$list = $html->find('#list');
+$items = $list->find('.item');
+$anchor = $html->find('a');
+
+assert_length($list, 1);
+assert_length($items, 3);
+assert_length($anchor, 6);
+
+// filter
+assert_length($list->filter('.item'), 0);
+assert_length($items->filter('.item1, .item3'), 2);
+
+// children
+assert_length($html->children(), 1);
+assert_length($html->children('.item'), 0);
+assert_length($list->children('.item1, .item3'), 2);
+
+// parent
+//TODO: reduce duplicates
+//assert_length($items->parent(), 1);
+assert_length($anchor->parent(), 6);
+
+// prev
+assert_length($anchor->prev(), 0);
+assert_length($items->prev(), 2);
+
+// next
+assert_length($anchor->next(), 3);
+assert_length($items->next(), 2);
+
+// prop
+assert('$anchor->prop("tagName") === "a"');
+
+// attr
+assert('$anchor->attr("href") === "#1"');
+
+// text
+assert('$anchor->text() === "link1"');
+assert('$anchor->next()->text() === "sublink1.1"');
+
+// html
+assert('$anchor->html() === "link1"');
+assert('$anchor->next()->html() === "<a href=\"#1.1\">sublink1.1</a>"');
+
+// outerHtml
+assert('$anchor->outerHtml() === "<a href=\"#1\">link1</a>"');
+
+echo "done\n";
