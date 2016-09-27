@@ -78,16 +78,31 @@ class ParseHelper
 
 		$filename = static::cacheDir().$name.'.json';
 
-		file_put_contents($filename, json_encode($data));
+		$json = json_encode($data);
+
+		if (!empty($json)) {
+			file_put_contents($filename, $json);
+		}
 	}
 
 	public static function fetch($url, array $options = [])
 	{
+		$response = [
+			'error' => false,
+			'status' => false,
+			'statusText' => false,
+			'headers' => [],
+			'contentType' => false,
+			'charset' => false,
+			'text' => false,
+			'json' => false,
+		];
+
 		$name = md5($url).'.'.md5(json_encode($options));
 		$cache = (isset($options['cache']) ? $options['cache'] : 'default');
 
-		if (($response = static::cacheGet($name, $cache)) !== false)
-			return (object)$response;
+		if (($responseCache = static::cacheGet($name, $cache)) !== false)
+			return (object)array_merge($response, (array)$responseCache);
 
 		$http = (isset($options['http']) && is_array($options['http']) ? $options['http'] : []);
 
@@ -103,22 +118,26 @@ class ParseHelper
 			'http' => $http,
 		]);
 
-		$text = file_get_contents($url, false, $context);
-		$headers = static::parseHeaders($http_response_header);
-		preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', array_shift($headers), $status);
+		$response['text'] = @file_get_contents($url, false, $context);
+		$response['error'] = ($response['text'] === false ? error_get_last()['message'] : false);
+		$response['headers'] = isset($http_response_header) ? static::parseHeaders($http_response_header) : [];
 
-		$response = [
-			'status' => $status[1],
-			'statusText' => $status[2],
-			'headers' => $headers,
-			'text' => $text,
-		];
+		preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', array_shift($response['headers']), $status);
+		if (count($status) > 2) {
+			list($response['status'], $response['statusText']) = $status;
+		}
 
-		$charset = null;
+		if (isset($response['headers']['Content-Type']) && is_array($response['headers']['Content-Type'])) {
+			$response['headers']['Content-Type'] = end($response['headers']['Content-Type']);
+		}
 
-		if (isset($headers['Content-Type']) && preg_match('/^([^;]+)(; charset=([-\w]+))?/', $headers['Content-Type'], $matches)) {
-			$response['contentType'] = $matches[1];
-			$response['charset'] = $matches[3];
+		if (isset($response['headers']['Content-Type']) && preg_match('/^([^;]+)(?:;\s*charset=([-\w]+))?/', $response['headers']['Content-Type'], $matches)) {
+			if (isset($matches[1])) {
+				$response['contentType'] = $matches[1];
+			}
+			if (isset($matches[2])) {
+				$response['charset'] = $matches[2];
+			}
 		}
 
 		if (isset($options['contentType'])) {
@@ -129,15 +148,17 @@ class ParseHelper
 			$response['charset'] = $options['charset'];
 		}
 
-		if (isset($response['charset'])) {
+		if ($response['charset']) {
 			$response['text'] = mb_convert_encoding($response['text'], mb_internal_encoding(), $response['charset']);
 		}
 
-		if (isset($response['contentType']) && $response['contentType'] === 'application/json') {
+		if ($response['contentType'] === 'application/json') {
 			$response['json'] = json_decode($response['text'], true);
 		}
 
-		static::cachePut($name, $response, $cache);
+		if ($http['method'] === 'GET') {
+			static::cachePut($name, $response, $cache);
+		}
 
 		return (object)$response;
 	}
