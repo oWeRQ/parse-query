@@ -55,8 +55,7 @@ assert_length($html->children('.item'), 0);
 assert_length($list->children('.item1, .item3'), 2);
 
 // parent
-//TODO: reduce duplicates
-//assert_length($items->parent(), 1);
+assert_length($items->parent(), 1);
 assert_length($anchor->parent(), 6);
 
 // prev

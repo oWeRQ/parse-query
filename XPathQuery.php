@@ -19,12 +19,22 @@ class XPathQuery implements IteratorAggregate
 	public function __construct($nodes = null, $xpath = null)
 	{
 		if ($nodes instanceof static) {
-			$nodes = $nodes->get();
-		} elseif (is_object($nodes)) {
-			$nodes = [$nodes];
-		}
+			$this->nodes = $nodes->get();
+		} elseif ($nodes instanceof DOMNode) {
+			$this->nodes = [$nodes];
+		} else {
+			foreach ((array)$nodes as $node) {
+				if (!$node instanceof DOMNode)
+					continue;
 
-		$this->nodes = (array)$nodes;
+				foreach ($this->nodes as $prev) {
+					if ($node->isSameNode($prev))
+						continue 2;
+				}
+
+				$this->nodes[] = $node;
+			}
+		}
 
 		if (!$xpath && !empty($this->nodes)) {
 			$this->xpath = new DOMXPath(reset($this->nodes)->ownerDocument);
