@@ -5,7 +5,8 @@ class XPathQuery implements IteratorAggregate
 	private $nodes = [];
 	private $xpath;
 
-	public function getIterator() {
+	public function getIterator()
+	{
 		$nodes = [];
 
 		foreach ($this->nodes as $node) {
@@ -25,10 +26,11 @@ class XPathQuery implements IteratorAggregate
 
 		$this->nodes = (array)$nodes;
 
-		if (!$xpath && !empty($nodes))
-			$this->xpath = new DOMXPath(reset($nodes)->ownerDocument);
-		else
+		if (!$xpath && !empty($this->nodes)) {
+			$this->xpath = new DOMXPath(reset($this->nodes)->ownerDocument);
+		} else {
 			$this->xpath = $xpath;
+		}
 	}
 
 	public function length()
@@ -57,6 +59,7 @@ class XPathQuery implements IteratorAggregate
 		$result = array_filter(array_map($callback, $this->nodes), function($value){
 			return ($value !== null);
 		});
+
 		return new static($result, $this->xpath);
 	}
 
