@@ -37,10 +37,13 @@ function assert_length($nodes, $expect)
 }
 
 // find
+$nop = $html->find('nop');
 $list = $html->find('#list');
 $items = $list->find('.item');
 $anchor = $html->find('a');
 
+assert_length($nop, 0);
+assert_length($nop->find('a'), 0);
 assert_length($list, 1);
 assert_length($items, 3);
 assert_length($anchor, 6);
@@ -53,6 +56,18 @@ assert_length($items->filter('.item1, .item3'), 2);
 assert_length($html->children(), 1);
 assert_length($html->children('.item'), 0);
 assert_length($list->children('.item1, .item3'), 2);
+
+// closest
+assert_length($list->closest('*'), 1);
+assert_length($list->closest('.item, #list'), 1);
+assert_length($list->closest('#list'), 1);
+assert_length($items->closest('#list'), 1);
+assert_length($anchor->closest('.item'), 3);
+
+// parents
+assert_length($list->parents(), 2);
+assert_length($list->parents('body'), 1);
+assert_length($list->parents('.list'), 0);
 
 // parent
 assert_length($items->parent(), 1);

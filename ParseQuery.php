@@ -31,6 +31,16 @@ class ParseQuery extends XPathQuery
 		return $this->xpathQuery($selector ? ParseHelper::css2XPath($selector, '') : '*');
 	}
 
+	public function closest($selector)
+	{
+		return $this->xpathQuery(str_replace('|', '[1]|', ParseHelper::css2XPath($selector, 'ancestor-or-self::')).'[1]');
+	}
+
+	public function parents($selector = null)
+	{
+		return $this->xpathQuery($selector ? ParseHelper::css2XPath($selector, 'ancestor::') : 'ancestor::*');
+	}
+
 	public function parent()
 	{
 		return $this->map(function($node){
