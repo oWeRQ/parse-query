@@ -68,6 +68,7 @@ assert_length($items->next(), 2);
 assert('$anchor->prop("tagName") === "a"');
 
 // attr
+assert('$anchor->attr() === ["href" => "#1"]');
 assert('$anchor->attr("href") === "#1"');
 
 // text

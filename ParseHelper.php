@@ -257,4 +257,15 @@ class ParseHelper
 
 		return $html;
 	}
+
+	public static function getAttributes(DOMNode $element)
+	{
+		$attributes = [];
+
+		foreach ($element->attributes as $attribute) {
+			$attributes[$attribute->name] = $attribute->value;
+		}
+
+		return $attributes;
+	}
 }

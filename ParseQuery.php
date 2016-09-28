@@ -73,9 +73,9 @@ class ParseQuery extends XPathQuery
 		return ($node = $this->get(0)) ? $node->$name : null;
 	}
 
-	public function attr($name)
+	public function attr($name = null)
 	{
-		return ($node = $this->get(0)) ? $node->getAttribute($name) : null;
+		return ($node = $this->get(0)) ? ($name ? $node->getAttribute($name) : ParseHelper::getAttributes($node)) : null;
 	}
 
 	public function text()
