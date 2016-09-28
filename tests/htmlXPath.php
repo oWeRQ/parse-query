@@ -2,51 +2,25 @@
 
 require_once '../ParseHelper.php';
 
-$html = <<<HTML
-<div id="list">
-	<span class="item item1">
-		<a href="#1">link1</a>
-		<small><a href="#1.1">sublink1.1</a></small>
-	</span>
-	<span class="item item2">
-		<a href="#2">link2</a>
-		<small><a href="#2.1">sublink2.1</a></small>
-	</span>
-	<span class="item item3">
-		<a href="#3">link3</a>
-		<small><a href="#3.1">sublink3.1</a></small>
-	</span>
-</div>
-<form action="https://www.google.ru/search">
-	<input type="hidden" name="start" value="0">
-	<input type="text" name="q" value="test">
-	<input type="submit" value="Search">
-</form>
-HTML;
+$xpath = ParseHelper::htmlXPath(file_get_contents('fixtures/page1.html'));
 
-$xpath = ParseHelper::htmlXPath($html);
+assert($xpath instanceof DOMXPath);
 
-$selectors = [
-	'#list > .item3 a',
-	'.item1 ~ *',
-	'.item1 > a ~ *',
-	'.item1 ~ .item3',
-	'input[type=text]',
-	'input[type ~= "submit"]',
-];
+$root = $xpath->query('.')->item(0);
 
-foreach ($selectors as $selector) {
-	$expression = ParseHelper::css2XPath($selector);
-	$nodes = $xpath->query($expression);
+assert($root instanceof DOMElement);
+assert($root->ownerDocument instanceof DOMDocument);
+assert(!$root->isSameNode($root->ownerDocument));
+assert($root->isSameNode($root->ownerDocument->documentElement));
+assert($root->tagName === 'html');
 
-	echo "selector: $selector\n";
-	echo "expression: $expression\n";
-	echo "length: {$nodes->length}\n\n";
+$self = $xpath->query('descendant::html', $root)->item(0);
 
-	foreach ($nodes as $node) {
-		echo "tag: {$node->tagName}\n";
-		echo "content: '{$node->textContent}'\n\n";
-	}
+assert($self === null);
 
-	echo "===\n\n";
-}
+$form = $xpath->query('descendant::form', $root)->item(0);
+
+assert($form instanceof DOMElement);
+assert($form->tagName === 'form');
+
+echo "done\n";

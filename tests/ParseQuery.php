@@ -2,24 +2,7 @@
 
 require_once '../ParseQuery.php';
 
-$html = ParseQuery::loadHtml(
-<<<HTML
-<div id="list">
-	<span class="item item1">
-		<a href="#1">link1</a>
-		<small><a href="#1.1">sublink1.1</a></small>
-	</span>
-	<span class="item item2">
-		<a href="#2">link2</a>
-		<small><a href="#2.1">sublink2.1</a></small>
-	</span>
-	<span class="item item3">
-		<a href="#3">link3</a>
-		<small><a href="#3.1">sublink3.1</a></small>
-	</span>
-</div>
-HTML
-);
+$html = ParseQuery::loadHtml(file_get_contents('fixtures/page1.html'));
 
 function dump($nodes, $method = 'outerHtml', $params = [])
 {
@@ -53,7 +36,7 @@ assert_length($list->filter('.item'), 0);
 assert_length($items->filter('.item1, .item3'), 2);
 
 // children
-assert_length($html->children(), 1);
+assert_length($html->children(), 2);
 assert_length($html->children('.item'), 0);
 assert_length($list->children('.item1, .item3'), 2);
 
