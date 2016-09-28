@@ -37,7 +37,7 @@ class XPathQuery implements IteratorAggregate
 		}
 
 		if (!$xpath && !empty($this->nodes)) {
-			$this->xpath = new DOMXPath(reset($this->nodes)->ownerDocument);
+			$this->xpath = new DOMXPath($this->nodes[0]->ownerDocument ?: $this->nodes[0]);
 		} else {
 			$this->xpath = $xpath;
 		}
@@ -53,6 +53,9 @@ class XPathQuery implements IteratorAggregate
 		if ($index === null)
 			return $this->nodes;
 
+		if ($index < 0)
+			$index += count($this->nodes);
+
 		if (empty($this->nodes[$index]))
 			return null;
 
@@ -66,7 +69,7 @@ class XPathQuery implements IteratorAggregate
 
 	public function map($callback)
 	{
-		$result = array_filter(array_map($callback, $this->nodes), function($value){
+		$result = array_filter(array_map($callback, $this->nodes, array_keys($this->nodes)), function($value){
 			return ($value !== null);
 		});
 

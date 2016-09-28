@@ -6,7 +6,7 @@ $xpath = ParseHelper::htmlXPath(file_get_contents('fixtures/page1.html'));
 
 assert($xpath instanceof DOMXPath);
 
-$root = $xpath->query('.')->item(0);
+$root = $xpath->document->documentElement;
 
 assert($root instanceof DOMElement);
 assert($root->ownerDocument instanceof DOMDocument);

@@ -13,7 +13,7 @@ class ParseQuery extends XPathQuery
 	public static function loadHtml($html)
 	{
 		$xpath = ParseHelper::htmlXPath($html);
-		return new static($xpath->query('.')->item(0), $xpath);
+		return new static($xpath->document, $xpath);
 	}
 
 	public function find($selector)

@@ -36,7 +36,7 @@ assert_length($list->filter('.item'), 0);
 assert_length($items->filter('.item1, .item3'), 2);
 
 // children
-assert_length($html->children(), 2);
+assert_length($html->children(), 1);
 assert_length($html->children('.item'), 0);
 assert_length($list->children('.item1, .item3'), 2);
 
