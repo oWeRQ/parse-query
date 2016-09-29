@@ -2,7 +2,7 @@
 
 require_once '../ParseQuery.php';
 
-$html = ParseQuery::loadHtml(file_get_contents('fixtures/page1.html'));
+$html = ParseQuery::fetch('fixtures/page1.html');
 
 function dump($nodes, $method = 'outerHtml', $params = [])
 {
