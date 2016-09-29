@@ -185,6 +185,33 @@ class ParseHelper
 		return new DOMXpath($doc);
 	}
 
+	public static function css2XPathPseudo($selector, &$holders)
+	{
+		$pattern = ':([-\w]+)\(([^()]*)\)';
+
+		$selector = preg_replace_callback("/$pattern/", function($match) use(&$holders){
+			list($cond, $func, $value) = $match + array_fill(0, 3, null);
+
+			$cond = '';
+
+			if ($func === 'not') $cond = "[$func(".static::css2XPath($value, 'self::').")]";
+			elseif ($func === 'has') $cond = "[".static::css2XPath($value)."]";
+			elseif ($func === 'eq') $cond = "[".($value + 1)."]";
+			elseif ($func === 'contains') $cond = "[$func(text(),$value)]";
+			else $cond = "[$func($value)]";
+
+			$holder = '{'.count($holders).'}';
+			$holders[$holder] = $cond;
+			return $holder;
+		}, $selector, -1, $count);
+
+		if ($count > 0) {
+			$selector = static::css2XPathPseudo($selector, $holders);
+		}
+
+		return $selector;
+	}
+
 	public static function css2XPathConditions($selector, &$holders)
 	{
 		$pattern = implode('\s*', [
@@ -221,10 +248,23 @@ class ParseHelper
 
 	public static function css2XPath($selector, $context = 'descendant::')
 	{
-		$selector = $context.trim($selector);
 		$holders = [];
 
+		$selector = static::css2XPathPseudo($selector, $holders);
 		$selector = static::css2XPathConditions($selector, $holders);
+
+		$selector = static::css2XPathPlain($selector, $context);
+
+		foreach (array_reverse($holders) as $holder => $value) {
+			$selector = str_replace($holder, $value, $selector);
+		}
+
+		return $selector;
+	}
+
+	public static function css2XPathPlain($selector, $context = 'descendant::')
+	{
+		$selector = $context.trim($selector);
 
 		$replace = [
 			'\s*,\s*' => '|'.$context,
@@ -241,7 +281,7 @@ class ParseHelper
 			$selector = preg_replace("/$pattern/", $replacement, $selector);
 		}
 
-		return strtr($selector, $holders);
+		return $selector;
 	}
 
 	public static function innerHtml(DOMNode $element)
