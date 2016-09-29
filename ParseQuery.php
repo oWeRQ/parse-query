@@ -92,4 +92,23 @@ class ParseQuery extends XPathQuery
 	{
 		return ($node = $this->get(0)) ? $node->ownerDocument->saveHTML($node) : null;
 	}
+
+	public function __toString()
+	{
+		return '['.implode(', ', array_map(function($node){
+			$id = $node->getAttribute('id');
+			$class = $node->getAttribute('class');
+			$text = trim(preg_replace('/\s+/', ' ', $node->textContent));
+
+			if (empty($text)) {
+				$text = $node->getAttribute('value');
+			}
+
+			if (strlen($text) > 10) {
+				$text = substr($text, 0, 10).'...';
+			}
+
+			return $node->tagName.($id ? '#'.$id : '').($class ? '.'.str_replace(' ', '.', $class) : '').($text ? '{'.$text.'}' : '');
+		}, $this->get())).']';
+	}
 }
