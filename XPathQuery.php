@@ -28,7 +28,7 @@ class XPathQuery implements IteratorAggregate
 					continue;
 
 				foreach ($this->nodes as $prev) {
-					if ($node->isSameNode($prev))
+					if ($node === $prev)
 						continue 2;
 				}
 
@@ -76,13 +76,16 @@ class XPathQuery implements IteratorAggregate
 		return new static($result, $this->xpath);
 	}
 
-	public function xpathQuery($expression)
+	public function xpathQuery($expression, $limit = 0)
 	{
 		$result = [];
 
 		foreach ($this->nodes as $context) {
 			foreach ($this->xpath->query($expression, $context) as $node) {
 				$result[] = $node;
+
+				if (--$limit === 0)
+					break 2;
 			}
 		}
 
