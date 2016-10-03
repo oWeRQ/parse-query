@@ -27,10 +27,8 @@ class XPathQuery implements IteratorAggregate
 				if (!$node instanceof DOMNode)
 					continue;
 
-				foreach ($this->nodes as $prev) {
-					if ($node === $prev)
-						continue 2;
-				}
+				if (in_array($node, $this->nodes, true))
+					continue;
 
 				$this->nodes[] = $node;
 			}
