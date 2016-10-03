@@ -175,9 +175,11 @@ class ParseHelper
 		return (object)$response;
 	}
 
-	public static function htmlXPath($html)
+	public static function htmlXPath($html, $isUtf8 = true)
 	{
-		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+		if ($isUtf8) {
+			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+		}
 		
 		$doc = new DOMDocument();
 		@$doc->loadHTML($html);
@@ -271,7 +273,7 @@ class ParseHelper
 			'\s*>\s*' => '/',
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
-			'\s+' => '//',
+			'\s+' => '/descendant-or-self::',
 			'\#([^\/|{.]+)' => '[@id="\1"]',
 			'\.([^\/|{#]+)' => '[contains(concat(" ",@class," ")," \1 ")]',
 			'(^|\/|::|\|)([^*\/\w])' => '\1*\2',
