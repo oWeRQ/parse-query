@@ -273,7 +273,7 @@ class ParseHelper
 			'\s*>\s*' => '/',
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
-			'\s+' => '/descendant-or-self::',
+			'\s+' => '/descendant::',
 			'\#([^\/|{.]+)' => '[@id="\1"]',
 			'\.([^\/|{#]+)' => '[contains(concat(" ",@class," ")," \1 ")]',
 			'(^|\/|::|\|)([^*\/\w])' => '\1*\2',
