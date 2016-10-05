@@ -16,25 +16,25 @@ class XPathQuery implements IteratorAggregate
 		return new ArrayIterator($nodes);
 	}
 
-	public function __construct($nodes = null, $xpath = null)
+	public function __construct($nodes = null, DOMXPath $xpath = null)
 	{
 		if ($nodes instanceof static) {
 			$this->nodes = $nodes->get();
 		} elseif ($nodes instanceof DOMNode) {
 			$this->nodes = [$nodes];
 		} elseif (is_array($nodes) || $nodes instanceof DOMNodeList) {
+			$uniqueNodes = [];
+
 			foreach ($nodes as $node) {
-				if (!$node instanceof DOMNode)
-					continue;
-
-				if (in_array($node, $this->nodes, true))
-					continue;
-
-				$this->nodes[] = $node;
+				if ($node instanceof DOMNode) {
+					$uniqueNodes[spl_object_hash($node)] = $node;
+				}
 			}
+
+			$this->nodes = array_values($uniqueNodes);
 		}
 
-		if (!$xpath && !empty($this->nodes)) {
+		if (!$xpath && $this->nodes) {
 			$this->xpath = new DOMXPath($this->nodes[0]->ownerDocument ?: $this->nodes[0]);
 		} else {
 			$this->xpath = $xpath;
@@ -65,11 +65,9 @@ class XPathQuery implements IteratorAggregate
 		return new static(static::get($index), $this->xpath);
 	}
 
-	public function map($callback)
+	public function map(callable $callback)
 	{
-		$result = array_filter(array_map($callback, $this->nodes, array_keys($this->nodes)), function($value){
-			return ($value !== null);
-		});
+		$result = array_map($callback, $this->nodes, array_keys($this->nodes));
 
 		return new static($result, $this->xpath);
 	}
