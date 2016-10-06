@@ -45,6 +45,8 @@ assert_length($list->closest('*'), 1);
 assert_length($list->closest('.item, #list'), 1);
 assert_length($list->closest('#list'), 1);
 assert_length($items->closest('#list'), 1);
+assert_length($items->closest('.item, #list'), 3);
+assert_length($items->closest('#list, .item'), 3);
 assert_length($anchor->closest('.item'), 3);
 
 // parents

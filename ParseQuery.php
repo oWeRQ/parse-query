@@ -33,7 +33,7 @@ class ParseQuery extends XPathQuery
 
 	public function closest($selector)
 	{
-		return $this->xpathQuery(str_replace('|', '[1]|', ParseHelper::css2XPath($selector, 'ancestor-or-self::')).'[1]');
+		return $this->xpathQuery('('.ParseHelper::css2XPath($selector, 'ancestor-or-self::').')[last()]');
 	}
 
 	public function parents($selector = null)
@@ -114,11 +114,7 @@ class ParseQuery extends XPathQuery
 		return '['.implode(', ', array_map(function($node){
 			$id = $node->getAttribute('id');
 			$class = $node->getAttribute('class');
-			$text = trim(preg_replace('/\s+/', ' ', $node->textContent));
-
-			if (empty($text)) {
-				$text = $node->getAttribute('value');
-			}
+			$text = trim(preg_replace('/\s+/', ' ', $node->textContent)) ?: $node->getAttribute('value');
 
 			if (strlen($text) > 10) {
 				$text = substr($text, 0, 10).'...';
