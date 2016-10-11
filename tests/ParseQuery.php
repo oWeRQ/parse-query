@@ -70,10 +70,12 @@ assert_length($items->next(), 2);
 
 // prop
 assert('$anchor->prop("tagName") === "a"');
+assert('$anchor->prop("src") === null');
 
 // attr
 assert('$anchor->attr() === ["href" => "#1"]');
 assert('$anchor->attr("href") === "#1"');
+assert('$anchor->attr("src") === null');
 
 // text
 assert('$anchor->text() === "link1"');

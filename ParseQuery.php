@@ -72,17 +72,25 @@ class ParseQuery extends XPathQuery
 
 	public function prop($name)
 	{
-		return ($node = $this->get(0)) ? $node->$name : null;
+		return ($node = $this->get(0)) && property_exists($node, $name) ? $node->$name : null;
 	}
 
 	public function attr($name = null)
 	{
-		return ($node = $this->get(0)) ? ($name ? $node->getAttribute($name) : DOMHelper::getAttributes($node)) : null;
+		if ($node = $this->get(0)) {
+			if (!$name)
+				return DOMHelper::getAttributes($node);
+
+			if ($node->hasAttribute($name))
+				return $node->getAttribute($name);
+		}
+
+		return null;
 	}
 
 	public function text()
 	{
-		return ($node = $this->get(0)) ? $node->textContent : null;
+		return $this->prop('textContent');
 	}
 
 	public function html()
