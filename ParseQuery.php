@@ -1,44 +1,46 @@
 <?php
 
-require_once 'ParseHelper.php';
+require_once 'DOMHelper.php';
+require_once 'RequestHelper.php';
+require_once 'XPathHelper.php';
 require_once 'XPathQuery.php';
 
 class ParseQuery extends XPathQuery
 {
 	public static function fetch($url, array $options = [])
 	{
-		return static::loadHtml(ParseHelper::fetch($url, $options)->text);
+		return static::loadHtml(RequestHelper::fetch($url, $options)->text);
 	}
 
 	public static function loadHtml($html)
 	{
-		$xpath = ParseHelper::htmlXPath($html);
+		$xpath = DOMHelper::htmlXPath($html);
 		return new static($xpath->document, $xpath);
 	}
 
 	public function find($selector)
 	{
-		return $this->xpathQuery(ParseHelper::css2XPath($selector));
+		return $this->xpath(XPathHelper::toXPath($selector));
 	}
 
 	public function filter($selector)
 	{
-		return $this->xpathQuery(ParseHelper::css2XPath($selector, 'self::'));
+		return $this->xpath(XPathHelper::toXPath($selector, 'self::'));
 	}
 
 	public function children($selector = null)
 	{
-		return $this->xpathQuery($selector ? ParseHelper::css2XPath($selector, '') : '*');
+		return $this->xpath($selector ? XPathHelper::toXPath($selector, '') : '*');
 	}
 
 	public function closest($selector)
 	{
-		return $this->xpathQuery('('.ParseHelper::css2XPath($selector, 'ancestor-or-self::').')[last()]');
+		return $this->xpath('('.XPathHelper::toXPath($selector, 'ancestor-or-self::').')[last()]');
 	}
 
 	public function parents($selector = null)
 	{
-		return $this->xpathQuery($selector ? ParseHelper::css2XPath($selector, 'ancestor::') : 'ancestor::*');
+		return $this->xpath($selector ? XPathHelper::toXPath($selector, 'ancestor::') : 'ancestor::*');
 	}
 
 	public function parent()
@@ -75,7 +77,7 @@ class ParseQuery extends XPathQuery
 
 	public function attr($name = null)
 	{
-		return ($node = $this->get(0)) ? ($name ? $node->getAttribute($name) : ParseHelper::getAttributes($node)) : null;
+		return ($node = $this->get(0)) ? ($name ? $node->getAttribute($name) : DOMHelper::getAttributes($node)) : null;
 	}
 
 	public function text()
@@ -85,12 +87,12 @@ class ParseQuery extends XPathQuery
 
 	public function html()
 	{
-		return ($node = $this->get(0)) ? ParseHelper::innerHtml($node) : null;
+		return ($node = $this->get(0)) ? DOMHelper::innerHtml($node) : null;
 	}
 
 	public function outerHtml()
 	{
-		return ($node = $this->get(0)) ? $node->ownerDocument->saveHTML($node) : null;
+		return ($node = $this->get(0)) ? DOMHelper::outerHtml($node) : null;
 	}
 
 	public function __get($name)
@@ -107,20 +109,10 @@ class ParseQuery extends XPathQuery
 		}
 
 		return null;
-	}
+	}	
 
 	public function __toString()
 	{
-		return '['.implode(', ', array_map(function($node){
-			$id = $node->getAttribute('id');
-			$class = $node->getAttribute('class');
-			$text = trim(preg_replace('/\s+/', ' ', $node->textContent)) ?: $node->getAttribute('value');
-
-			if (strlen($text) > 10) {
-				$text = substr($text, 0, 10).'...';
-			}
-
-			return $node->tagName.($id ? '#'.$id : '').($class ? '.'.str_replace(' ', '.', $class) : '').($text ? '{'.$text.'}' : '');
-		}, $this->get())).']';
+		return $this->length().' in ['.implode(', ', array_map(['DOMHelper', 'nodeToString'], $this->get())).']';
 	}
 }

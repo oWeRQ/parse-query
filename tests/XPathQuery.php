@@ -10,8 +10,8 @@ $doc->loadHTMLFile('fixtures/page1.html');
 $html = new XPathQuery($doc);
 
 // xpathQuery
-$smalls = $html->xpathQuery('descendant::small');
-$anchors = $smalls->xpathQuery('descendant::a');
+$smalls = $html->xpath('descendant::small');
+$anchors = $smalls->xpath('descendant::a');
 
 // length
 assert($html->length() === 1);
@@ -47,4 +47,4 @@ assert($smallsOddChild->length() === 2);
 assert($smallsOddChild->get(0)->tagName === 'a');
 assert($smallsOddChild->get(1)->textContent === 'sublink3.1');
 
-echo "done\n";
+echo "XPathQuery done\n";

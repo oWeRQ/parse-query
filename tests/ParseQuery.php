@@ -2,8 +2,6 @@
 
 require_once '../ParseQuery.php';
 
-$html = ParseQuery::fetch('fixtures/page1.html');
-
 function dump($nodes, $method = 'outerHtml', $params = [])
 {
 	$ret = '';
@@ -18,6 +16,10 @@ function assert_length($nodes, $expect)
 	$length = $nodes->length();
 	assert($length === $expect, "expect $expect, return $length nodes:\n".dump($nodes));
 }
+
+// fetch and loadHtml
+$html = ParseQuery::fetch('fixtures/page1.html');
+assert_length($html, 1);
 
 // find
 $nop = $html->find('nop');
@@ -90,6 +92,6 @@ assert('$anchor->textContent === "link1"');
 assert('$anchor->href === "#1"');
 
 //__toString
-assert('(string)$anchor === "[a{link1}, a{sublink1.1}, a{link2}, a{sublink2.1}, a{link3}, a{sublink3.1}]"');
+assert('(string)$anchor === "6 in [a{link1}, a{sublink1.1}, a{link2}, a{sublink2.1}, a{link3}, a{sublink3.1}]"');
 
-echo "done\n";
+echo "ParseQuery done\n";

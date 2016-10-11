@@ -72,7 +72,7 @@ class XPathQuery implements IteratorAggregate
 		return new static($result, $this->xpath);
 	}
 
-	public function xpathQuery($expression, $limit = 0)
+	public function xpath($expression, $limit = 0)
 	{
 		$result = [];
 
