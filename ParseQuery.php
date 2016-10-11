@@ -95,22 +95,6 @@ class ParseQuery extends XPathQuery
 		return ($node = $this->get(0)) ? DOMHelper::outerHtml($node) : null;
 	}
 
-	public function __get($name)
-	{
-		if (method_exists($this, $name))
-			return $this->$name();
-
-		if ($node = $this->get(0)) {
-			if (isset($node->$name))
-				return $node->$name;
-
-			if ($node->hasAttribute($name))
-				return $node->getAttribute($name);
-		}
-
-		return null;
-	}	
-
 	public function __toString()
 	{
 		return $this->length().' in ['.implode(', ', array_map(['DOMHelper', 'nodeToString'], $this->get())).']';

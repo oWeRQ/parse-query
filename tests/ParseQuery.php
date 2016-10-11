@@ -86,11 +86,6 @@ assert('$anchor->next()->html() === "<a href=\"#1.1\">sublink1.1</a>"');
 // outerHtml
 assert('$anchor->outerHtml() === "<a href=\"#1\">link1</a>"');
 
-//__get
-assert('$anchor->outerHtml === "<a href=\"#1\">link1</a>"');
-assert('$anchor->textContent === "link1"');
-assert('$anchor->href === "#1"');
-
 //__toString
 assert('(string)$anchor === "6 in [a{link1}, a{sublink1.1}, a{link2}, a{sublink2.1}, a{link3}, a{sublink3.1}]"');
 

@@ -47,4 +47,8 @@ assert($smallsOddChild->length() === 2);
 assert($smallsOddChild->get(0)->tagName === 'a');
 assert($smallsOddChild->get(1)->textContent === 'sublink3.1');
 
+//__get
+assert($anchors->textContent === "sublink1.1");
+assert($anchors->href === "#1.1");
+
 echo "XPathQuery done\n";

@@ -87,4 +87,17 @@ class XPathQuery implements IteratorAggregate
 
 		return new static($result, $this->xpath);
 	}
+
+	public function __get($name)
+	{
+		if ($node = $this->get(0)) {
+			if (property_exists($node, $name))
+				return $node->$name;
+
+			if ($node->hasAttribute($name))
+				return $node->getAttribute($name);
+		}
+
+		return null;
+	}
 }
