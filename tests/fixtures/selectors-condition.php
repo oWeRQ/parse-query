@@ -13,5 +13,6 @@ return [
 	// condition spaces and quotes
 	'input[  type  ]' => 'descendant::input[@type]',
 	'input[  type  =  "  text  "  ]' => 'descendant::input[@type="  text  "]',
-	//'input[  type  =  "  text\'s  "  ]' => 'descendant::input[@type="  text\'s  "]',
+	'input[  type  =  "  text\'s  "  ]' => 'descendant::input[@type="  text\'s  "]',
+	'input[  type  =  \'  text"s  \'  ]' => 'descendant::input[@type=\'  text"s  \']',
 ];

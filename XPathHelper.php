@@ -18,12 +18,12 @@ class XPathHelper
 		return $selector;
 	}
 
-	public static function toXPathPlain($selector, $context = 'descendant::')
+	public static function toXPathPlain($selector, $prefix = 'descendant::')
 	{
-		$selector = $context.trim($selector);
+		$selector = $prefix.trim($selector);
 
 		$replace = [
-			'\s*,\s*' => '|'.$context,
+			'\s*,\s*' => '|'.$prefix,
 			'\s*>\s*' => '/',
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
@@ -50,7 +50,7 @@ class XPathHelper
 			$cond = '';
 
 			if ($func === 'not') $cond = "[$func(".static::toXPath($value, 'self::').")]";
-			elseif ($func === 'has') $cond = "[".static::toXPath($value)."]";
+			elseif ($func === 'has') $cond = "[".static::toXPath($value, 'descendant::')."]";
 			elseif ($func === 'eq') $cond = "[".($value + 1)."]";
 			elseif ($func === 'contains') $cond = "[$func(text(),$value)]";
 			else $cond = "[$func($value)]";
@@ -73,7 +73,7 @@ class XPathHelper
 			'\[',
 			'([-+_\w()]+)', // attr
 			'(?:([~|^$*]?=)', // op
-			'([\'"]?)([^\]\'"]*)\3', // quote and value
+			'([\'"]?)(.*?)\3', // quote and value
 			')?\]',
 		]);
 
@@ -84,7 +84,7 @@ class XPathHelper
 				$attr = '@'.$attr;
 			}
 
-			$value = '"'.$value.'"';
+			$value = (strpos($value, '"') === false) ? '"'.$value.'"' : '\''.$value.'\'';
 
 			if ($op === null) $cond = "[$attr]";
 			elseif ($op === '=') $cond = "[$attr=$value]";
