@@ -2,7 +2,7 @@
 
 require_once 'DOMHelper.php';
 require_once 'RequestHelper.php';
-require_once 'XPathHelper.php';
+require_once 'SelectorHelper.php';
 require_once 'XPathQuery.php';
 
 class ParseQuery extends XPathQuery
@@ -20,27 +20,27 @@ class ParseQuery extends XPathQuery
 
 	public function find($selector)
 	{
-		return $this->xpath(XPathHelper::toXPath($selector));
+		return $this->xpath(SelectorHelper::toXPath($selector));
 	}
 
 	public function filter($selector)
 	{
-		return $this->xpath(XPathHelper::toXPath($selector, 'self::'));
+		return $this->xpath(SelectorHelper::toXPath($selector, 'self::'));
 	}
 
 	public function children($selector = null)
 	{
-		return $this->xpath($selector ? XPathHelper::toXPath($selector, '') : '*');
+		return $this->xpath($selector ? SelectorHelper::toXPath($selector, '') : '*');
 	}
 
 	public function closest($selector)
 	{
-		return $this->xpath('('.XPathHelper::toXPath($selector, 'ancestor-or-self::').')[last()]');
+		return $this->xpath('('.SelectorHelper::toXPath($selector, 'ancestor-or-self::').')[last()]');
 	}
 
 	public function parents($selector = null)
 	{
-		return $this->xpath($selector ? XPathHelper::toXPath($selector, 'ancestor::') : 'ancestor::*');
+		return $this->xpath($selector ? SelectorHelper::toXPath($selector, 'ancestor::') : 'ancestor::*');
 	}
 
 	public function parent()
@@ -103,8 +103,13 @@ class ParseQuery extends XPathQuery
 		return ($node = $this->get(0)) ? DOMHelper::outerHtml($node) : null;
 	}
 
+	public function length()
+	{
+		return $this->count();
+	}
+
 	public function __toString()
 	{
-		return $this->length().' in ['.implode(', ', array_map(['DOMHelper', 'nodeToString'], $this->get())).']';
+		return $this->count().' in ['.implode(', ', array_map(['DOMHelper', 'nodeToString'], $this->get())).']';
 	}
 }

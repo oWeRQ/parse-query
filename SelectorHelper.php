@@ -6,8 +6,8 @@ class XPathHelper
 	{
 		$holders = [];
 
-		$selector = static::xpathPseudo($selector, $holders);
-		$selector = static::xpathConditions($selector, $holders);
+		$selector = static::holdXPathPseudo($selector, $holders);
+		$selector = static::holdXPathConditions($selector, $holders);
 
 		$selector = static::toXPathPlain($selector, $prefix);
 
@@ -20,10 +20,21 @@ class XPathHelper
 
 	public static function toXPathPlain($selector, $prefix = 'descendant::')
 	{
-		$selector = $prefix.trim($selector);
+		$xpaths = [];
 
+		$selectors = preg_split('/\s*,\s*/', trim($selector));
+
+		foreach ($selectors as $selector) {
+			$xpath = static::toXPathSingle($selector);
+			$xpaths[] = ($xpath[0] !== '/' ? $prefix.$xpath : substr($xpath, 1));
+		}
+
+		return implode('|', $xpaths);
+	}
+
+	public static function toXPathSingle($selector)
+	{
 		$replace = [
-			'\s*,\s*' => '|'.$prefix,
 			'\s*>\s*' => '/',
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
@@ -40,7 +51,7 @@ class XPathHelper
 		return $selector;
 	}
 
-	public static function xpathPseudo($selector, &$holders)
+	public static function holdXPathPseudo($selector, &$holders)
 	{
 		$pattern = ':([-\w]+)\(([^()]*)\)';
 
@@ -61,13 +72,13 @@ class XPathHelper
 		}, $selector, -1, $count);
 
 		if ($count > 0) {
-			$selector = static::xpathPseudo($selector, $holders);
+			$selector = static::holdXPathPseudo($selector, $holders);
 		}
 
 		return $selector;
 	}
 
-	public static function xpathConditions($selector, &$holders)
+	public static function holdXPathConditions($selector, &$holders)
 	{
 		$pattern = implode('\s*', [
 			'\[',

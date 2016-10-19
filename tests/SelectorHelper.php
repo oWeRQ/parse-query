@@ -1,6 +1,6 @@
 <?php
 
-require_once '../XPathHelper.php';
+require_once '../SelectorHelper.php';
 
 $tests = array_merge(
 	require('fixtures/selectors-plain.php'),
@@ -14,7 +14,7 @@ $passed = $failed = 0;
 $start = microtime(true);
 
 foreach ($tests as $selector => $expect) {
-	$expression = XPathHelper::toXPath($selector);
+	$expression = SelectorHelper::toXPath($selector);
 
 	if (!assert($expression === $expect, $selector)) {
 		$failed++;
@@ -26,4 +26,4 @@ foreach ($tests as $selector => $expect) {
 
 $time = round(microtime(true) - $start, 4);
 
-echo "XPathHelper done, passed: $passed, failed: $failed, time: $time s\n";
+echo "SelectorHelper done, passed: $passed, failed: $failed, time: $time s\n";

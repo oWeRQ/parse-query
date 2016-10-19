@@ -1,6 +1,6 @@
 <?php
 
-class XPathQuery implements IteratorAggregate
+class XPathQuery implements \IteratorAggregate, \Countable
 {
 	private $nodes = [];
 	private $xpath;
@@ -13,20 +13,20 @@ class XPathQuery implements IteratorAggregate
 			$nodes[] = new static($node, $this->xpath);
 		}
 
-		return new ArrayIterator($nodes);
+		return new \ArrayIterator($nodes);
 	}
 
-	public function __construct($nodes = null, DOMXPath $xpath = null)
+	public function __construct($nodes = null, \DOMXPath $xpath = null)
 	{
-		if ($nodes instanceof static) {
+		if ($nodes instanceof self) {
 			$this->nodes = $nodes->get();
-		} elseif ($nodes instanceof DOMNode) {
+		} elseif ($nodes instanceof \DOMNode) {
 			$this->nodes = [$nodes];
-		} elseif (is_array($nodes) || $nodes instanceof DOMNodeList) {
+		} elseif (is_array($nodes) || $nodes instanceof \DOMNodeList) {
 			$uniqueNodes = [];
 
 			foreach ($nodes as $node) {
-				if ($node instanceof DOMNode) {
+				if ($node instanceof \DOMNode) {
 					$uniqueNodes[spl_object_hash($node)] = $node;
 				}
 			}
@@ -35,13 +35,13 @@ class XPathQuery implements IteratorAggregate
 		}
 
 		if (!$xpath && $this->nodes) {
-			$this->xpath = new DOMXPath($this->nodes[0]->ownerDocument ?: $this->nodes[0]);
+			$this->xpath = new \DOMXPath($this->nodes[0]->ownerDocument ?: $this->nodes[0]);
 		} else {
 			$this->xpath = $xpath;
 		}
 	}
 
-	public function length()
+	public function count()
 	{
 		return count($this->nodes);
 	}
@@ -77,7 +77,7 @@ class XPathQuery implements IteratorAggregate
 		$result = [];
 
 		foreach ($this->nodes as $context) {
-			foreach ($this->xpath->query($expression, $context) as $node) {
+			foreach ($this->xpathQuery($expression, $context) as $node) {
 				$result[] = $node;
 
 				if (--$limit === 0)
@@ -86,6 +86,19 @@ class XPathQuery implements IteratorAggregate
 		}
 
 		return new static($result, $this->xpath);
+	}
+
+	public function xpathQuery($expression, \DOMNode $contextnode = null, $registerNodeNS = true)
+	{
+		set_error_handler(function($errno, $errstr) use($expression){
+			throw new \Exception($errstr.' "'.$expression.'"', 0);
+		}, \E_WARNING);
+
+		$result = $this->xpath->query($expression, $contextnode, $registerNodeNS);
+
+		restore_error_handler();
+
+		return $result;
 	}
 
 	public function __get($name)

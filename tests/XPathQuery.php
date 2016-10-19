@@ -13,10 +13,10 @@ $html = new XPathQuery($doc);
 $smalls = $html->xpath('descendant::small');
 $anchors = $smalls->xpath('descendant::a');
 
-// length
-assert($html->length() === 1);
-assert($smalls->length() === 3);
-assert($anchors->length() === 3);
+// count
+assert($html->count() === 1);
+assert($smalls->count() === 3);
+assert($anchors->count() === 3);
 
 // get
 assert($html->get() === [$doc]);
@@ -43,7 +43,7 @@ $smallsOddChild = $smalls->map(function($node, $i){
 
 	return $node->firstChild;
 });
-assert($smallsOddChild->length() === 2);
+assert($smallsOddChild->count() === 2);
 assert($smallsOddChild->get(0)->tagName === 'a');
 assert($smallsOddChild->get(1)->textContent === 'sublink3.1');
 
