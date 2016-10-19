@@ -13,8 +13,11 @@ $passed = $failed = 0;
 
 $start = microtime(true);
 
+$xpath = new DOMXpath(new DOMDocument());
+
 foreach ($tests as $selector => $expect) {
 	$expression = SelectorHelper::toXPath($selector);
+	$xpath->query($expression);
 
 	if (!assert($expression === $expect, $selector)) {
 		$failed++;

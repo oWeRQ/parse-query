@@ -1,6 +1,6 @@
 <?php
 
-class XPathHelper
+class SelectorHelper
 {
 	public static function toXPath($selector, $prefix = 'descendant::')
 	{
@@ -39,9 +39,10 @@ class XPathHelper
 			'\s*~\s*' => '/following-sibling::',
 			'\s*\+\s*' => '/following-sibling::*[1]/self::',
 			'\s+' => '/descendant::',
-			'\#([^\/|{.]+)' => '[@id="\1"]',
-			'\.([^\/|{#]+)' => '[contains(concat(" ",@class," ")," \1 ")]',
-			'(^|\/|::|\|)([^*\/\w])' => '\1*\2',
+			'\#([\w_-]+)' => '[@id="\1"]',
+			//'\.([\w_-]+)' => '[contains(concat(" ",normalize-space(@class)," ")," \1 ")]',
+			'\.([\w_-]+)' => '[contains(concat(" ",@class," ")," \1 ")]',
+			'(?<=^|\||\/|::)(?![*\w\/])' => '*',
 		];
 
 		foreach ($replace as $pattern => $replacement) {
@@ -56,9 +57,7 @@ class XPathHelper
 		$pattern = ':([-\w]+)\(([^()]*)\)';
 
 		$selector = preg_replace_callback("/$pattern/", function($match) use(&$holders){
-			list($cond, $func, $value) = $match + array_fill(0, 3, null);
-
-			$cond = '';
+			list(, $func, $value) = $match + array_fill(0, 3, null);
 
 			if ($func === 'not') $cond = "[$func(".static::toXPath($value, 'self::').")]";
 			elseif ($func === 'has') $cond = "[".static::toXPath($value, 'descendant::')."]";

@@ -14,4 +14,8 @@ return [
 	'.class' => 'descendant::*[contains(concat(" ",@class," ")," class ")]',
 	'#id.class' => 'descendant::*[@id="id"][contains(concat(" ",@class," ")," class ")]',
 	'div#id.class' => 'descendant::div[@id="id"][contains(concat(" ",@class," ")," class ")]',
+	'div .class' => 'descendant::div/descendant::*[contains(concat(" ",@class," ")," class ")]',
+	'#id .class' => 'descendant::*[@id="id"]/descendant::*[contains(concat(" ",@class," ")," class ")]',
+	'div > .class' => 'descendant::div/*[contains(concat(" ",@class," ")," class ")]',
+	'#id > .class' => 'descendant::*[@id="id"]/*[contains(concat(" ",@class," ")," class ")]',
 ];
