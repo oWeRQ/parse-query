@@ -30,6 +30,9 @@ class DOMHelper
 		if ($node->nodeType === XML_TEXT_NODE)
 			return $node->textContent;
 
+		if ($node instanceof DOMDocument)
+			return $node->saveHTML();
+
 		$html = '';
 
 		foreach ($node->childNodes as $child) {
@@ -37,6 +40,44 @@ class DOMHelper
 		}
 
 		return $html;
+	}
+
+	public static function setInnerHtml(DOMNode $node, $value)
+	{
+		if ($node instanceof DOMDocument) {
+			return @$node->loadHTML($value);
+		}
+
+		static::removeChildNodes($node);
+
+		$fragment = $node->ownerDocument->createDocumentFragment();
+
+		if (@$fragment->appendXML($value)) {
+			$node->appendChild($fragment);
+
+			return true;
+		} else {
+			$doc = new DOMDocument();
+
+			if (@$doc->loadHTML($value)) {
+				$body = $doc->getElementsByTagName('body')->item(0);
+				
+				foreach ($body->childNodes as $child) {
+					$node->appendChild($node->ownerDocument->importNode($child, true));
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static function removeChildNodes(DOMNode $node)
+	{
+		for ($i = $node->childNodes->length - 1; $i >= 0; $i--) {
+			$node->removeChild($node->childNodes->item($i));
+		}
 	}
 
 	public static function getAttributes(DOMNode $node)

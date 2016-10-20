@@ -31,6 +31,10 @@ $dd = $xpath->query('descendant::dd')->item(0);
 assert($dt->textContent === 'Hello world!');
 assert($dd->textContent === 'Привет мир!');
 
+$html = '<b>hello<br>world</b>';
+DOMHelper::setInnerHtml($dd, $html);
+assert('DOMHelper::innerHtml($dd) === $html');
+
 //var_dump($xpath->document->saveHTML());
 //var_dump($xpath->document->saveHTML($dd));
 
