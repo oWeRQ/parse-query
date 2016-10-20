@@ -91,6 +91,7 @@ class XPathQuery implements \IteratorAggregate, \Countable
 	public function xpathQuery($expression, \DOMNode $contextnode = null, $registerNodeNS = true)
 	{
 		set_error_handler(function($errno, $errstr) use($expression){
+			restore_error_handler();
 			throw new \Exception($errstr.' "'.$expression.'"', 0);
 		}, \E_WARNING);
 
