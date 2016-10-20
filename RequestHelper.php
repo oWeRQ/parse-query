@@ -168,7 +168,7 @@ class RequestHelper
 
 		static::processResponse($response, $options);
 
-		if ($contextOptions['http']['method'] === 'GET') {
+		if ($response['status'] !== false && $contextOptions['http']['method'] === 'GET') {
 			static::cachePut($name, $response, $cache);
 		}
 
