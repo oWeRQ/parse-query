@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Php DOM helper
+ */
 class DOMHelper
 {
 	/**

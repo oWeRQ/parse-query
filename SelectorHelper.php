@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * CSS selector helper
+ */
 class SelectorHelper
 {
 	/**

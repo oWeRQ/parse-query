@@ -5,6 +5,9 @@ require_once 'RequestHelper.php';
 require_once 'SelectorHelper.php';
 require_once 'XPathQuery.php';
 
+/**
+ * jQuery like select and process DOM nodes
+ */
 class ParseQuery extends XPathQuery
 {
 	/**

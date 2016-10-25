@@ -1,3 +1,3 @@
 #!/bin/sh
 
-apigen generate -s . -d docs --exclude=tests --exclude=exclude --template-theme=bootstrap --tree
+apigen generate -s . -d docs --exclude=examples/ --exclude=exclude/ --exclude=tests/ --template-theme=bootstrap --tree

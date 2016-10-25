@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Php DOM node and xpath wrapper
+ *
+ * Implements base interface like jQuery
+ */
 class XPathQuery implements \IteratorAggregate, \Countable
 {
 	/**

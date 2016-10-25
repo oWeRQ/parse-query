@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * HTTP request helper
+ */
 class RequestHelper
 {
 	/**
