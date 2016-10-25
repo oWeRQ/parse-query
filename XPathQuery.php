@@ -123,8 +123,8 @@ class XPathQuery implements \IteratorAggregate, \Countable
 	/**
 	 * Get new instance with xpathQuery result of all nodes
 	 *
-	 * @param callable $expression XPath expression
-	 * @param callable $limit Max result nodes
+	 * @param string $expression XPath expression
+	 * @param int $limit Max result nodes
 	 *
 	 * @return self
 	 */

@@ -69,7 +69,7 @@ class RequestHelper
 	}
 
 	/**
-	 * Get avalable to write dir for request cache
+	 * Get available to write dir for request cache
 	 *
 	 * @return string
 	 */
