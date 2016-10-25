@@ -2,6 +2,14 @@
 
 class DOMHelper
 {
+	/**
+	 * Load html and return DOMXpath
+	 *
+	 * @param string $html Html
+	 * @param boolean $isUtf8 Is convert utf8 to html entities
+	 *
+	 * @return \DOMXpath
+	 */
 	public static function htmlXPath($html, $isUtf8 = true)
 	{
 		if ($isUtf8) {
@@ -14,6 +22,13 @@ class DOMHelper
 		return new DOMXpath($doc);
 	}
 
+	/**
+	 * Get outer html
+	 *
+	 * @param DOMNode $node Element or text node or document
+	 *
+	 * @return string
+	 */
 	public static function outerHtml(DOMNode $node)
 	{
 		if ($node->nodeType === XML_TEXT_NODE)
@@ -25,6 +40,13 @@ class DOMHelper
 		return $node->ownerDocument->saveHTML($node);
 	}
 
+	/**
+	 * Get inner html
+	 *
+	 * @param DOMNode $node Element or text node
+	 *
+	 * @return string
+	 */
 	public static function innerHtml(DOMNode $node)
 	{
 		if ($node->nodeType === XML_TEXT_NODE)
@@ -39,6 +61,13 @@ class DOMHelper
 		return $html;
 	}
 
+	/**
+	 * Get all attributes
+	 *
+	 * @param DOMNode $node
+	 *
+	 * @return string[]
+	 */
 	public static function getAttributes(DOMNode $node)
 	{
 		$attributes = [];
@@ -50,6 +79,13 @@ class DOMHelper
 		return $attributes;
 	}
 
+	/**
+	 * Printable node representation
+	 *
+	 * @param DOMElement $node
+	 *
+	 * @return string
+	 */
 	public static function nodeToString(DOMElement $node)
 	{
 		$id = $node->getAttribute('id');
