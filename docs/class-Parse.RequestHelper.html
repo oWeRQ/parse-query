@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Parse\RequestHelper</title>
+
+	<link rel="stylesheet" href="resources/bootstrap.min.css?205d89eabbfe9d1c1773b4b5cfc2b45c150df981">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
+
+</head>
+
+<body>
+	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand">Overview</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+                <form id="search" class="navbar-form navbar-left" role="search">
+                    <input type="hidden" name="cx" value="">
+                    <input type="hidden" name="ie" value="UTF-8">
+                    <div class="form-group">
+                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
+					</div>
+				</form>
+
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="namespace-Parse.html" title="Summary of Parse"><span>Namespace</span></a>
+					</li>
+					<li class="active">
+<span>Class</span>					</li>
+
+					<li class="divider-vertical"></li>
+
+					<li>
+						<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+					</li>
+
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="left">
+	<div id="menu">
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+					<li class="active">
+						<a href="namespace-Parse.html">
+							Parse						</a>
+							</li>
+			</ul>
+		</div>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Parse.DOMHelper.html">DOMHelper</a></li>
+				<li><a href="class-Parse.ParseQuery.html">ParseQuery</a></li>
+				<li class="active"><a href="class-Parse.RequestHelper.html">RequestHelper</a></li>
+				<li><a href="class-Parse.SelectorHelper.html">SelectorHelper</a></li>
+				<li><a href="class-Parse.UpdateQuery.html">UpdateQuery</a></li>
+				<li><a href="class-Parse.XPathQuery.html">XPathQuery</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+	<div id="rightInner">
+<div id="content" class="class">
+	<h1>Class RequestHelper</h1>
+
+
+	<div class="description">
+	<p>HTTP request helper</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="alert alert-info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Parse.html">Parse</a><br>
+		
+
+			<b>Located at</b> <a href="source-class-Parse.RequestHelper.html#5-250" title="Go to source code">RequestHelper.php</a>
+		<br>
+	</div>
+
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Methods summary</h2></div>
+			<table class="summary table table-bordered table-striped methods" id="methods">
+		<tr data-order="buildHeaders" id="_buildHeaders">
+
+			<td class="attributes"><code>
+				 public static
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_buildHeaders">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#10-27" title="Go to source code">buildHeaders</a>( <span>mixed <var>$headers</var></span> )</code>
+
+			<div class="description short">
+				<p>Build headers to string</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Build headers to string</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$headers</var></dt>
+						<dd>String or string-array or hash-array</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="parseHeaders" id="_parseHeaders">
+
+			<td class="attributes"><code>
+				 public static
+				mixed[]
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_parseHeaders">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#29-74" title="Go to source code">parseHeaders</a>( <span>mixed <var>$rawHeaders</var></span> )</code>
+
+			<div class="description short">
+				<p>Parse headers (e.g. $http_response_header)</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Parse headers (e.g. $http_response_header)</p>
+
+<p>Example</p>
+
+<p>Input:
+['Content-Type' => 'text/plain', 'Content-Type: text/html']</p>
+
+<p>Output:
+['Content-Type' => ['text/plain', 'text/html']]</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$rawHeaders</var></dt>
+						<dd>String or string-array or hash-array</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						mixed[]
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="cacheDir" id="_cacheDir">
+
+			<td class="attributes"><code>
+				 public static
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_cacheDir">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#76-90" title="Go to source code">cacheDir</a>( )</code>
+
+			<div class="description short">
+				<p>Get available to write dir for request cache</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Get available to write dir for request cache</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="cacheGet" id="_cacheGet">
+
+			<td class="attributes"><code>
+				 public static
+				array|false
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_cacheGet">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#92-113" title="Go to source code">cacheGet</a>( <span>string <var>$name</var></span>, <span>string <var>$type</var> = <span class="php-quote">'default'</span></span>, <span>integer <var>$time</var> = <span class="php-num">3600</span></span> )</code>
+
+			<div class="description short">
+				<p>Get response data from cache</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Get response data from cache</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$name</var></dt>
+						<dd>Record name</dd>
+						<dt><var>$type</var></dt>
+						<dd>Values: default|no-cache|force-cache</dd>
+						<dt><var>$time</var></dt>
+						<dd>Seconds</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						array|false
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="cachePut" id="_cachePut">
+
+			<td class="attributes"><code>
+				 public static
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_cachePut">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#115-136" title="Go to source code">cachePut</a>( <span>string <var>$name</var></span>, <span>array <var>$data</var></span>, <span>string <var>$type</var> = <span class="php-quote">'default'</span></span> )</code>
+
+			<div class="description short">
+				<p>Put response data to cache</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Put response data to cache</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$name</var></dt>
+						<dd>Record name</dd>
+						<dt><var>$data</var></dt>
+						<dd>Record data</dd>
+						<dt><var>$type</var></dt>
+						<dd>Values: default|no-cache|force-cache</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="contextOptions" id="_contextOptions">
+
+			<td class="attributes"><code>
+				 public static
+				array
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_contextOptions">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#138-160" title="Go to source code">contextOptions</a>( <span>array <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Convert fetch-like options to stream_context_create() options</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Convert fetch-like options to stream_context_create() options</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$options</var></dt>
+						<dd>Fetch-like options</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						array
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="processResponse" id="_processResponse">
+
+			<td class="attributes"><code>
+				 public static
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_processResponse">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#162-205" title="Go to source code">processResponse</a>( <span>array <var>&amp; $response</var></span>, <span>array <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Process response</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Process response</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$response</var></dt>
+						<dd>Has keys: string text, array error, array headers</dd>
+						<dt><var>$options</var></dt>
+						<dd>Fetch-like options</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="fetch" id="_fetch">
+
+			<td class="attributes"><code>
+				 public static
+				object
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_fetch">#</a>
+			<code><a href="source-class-Parse.RequestHelper.html#207-249" title="Go to source code">fetch</a>( <span>string <var>$url</var></span>, <span>array <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Fetch like JS</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Fetch like JS</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$url</var></dt>
+						<dd>Request url or file path</dd>
+						<dt><var>$options</var></dt>
+						<dd>Fetch-like options</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						object
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+	</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>
