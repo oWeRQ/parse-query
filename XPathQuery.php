@@ -1,5 +1,7 @@
 <?php
 
+namespace Parse;
+
 /**
  * Php DOM node and xpath wrapper
  *

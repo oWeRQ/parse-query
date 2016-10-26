@@ -1,6 +1,8 @@
 <?php
 
-require_once '../ParseQuery.php';
+require_once '../vendor/autoload.php';
+
+use Parse\ParseQuery;
 
 function dump($nodes, $method = 'outerHtml', $params = [])
 {

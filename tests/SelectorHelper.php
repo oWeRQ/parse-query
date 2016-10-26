@@ -1,6 +1,8 @@
 <?php
 
-require_once '../SelectorHelper.php';
+require_once '../vendor/autoload.php';
+
+use Parse\SelectorHelper;
 
 $tests = array_merge(
 	require('fixtures/selectors-plain.php'),

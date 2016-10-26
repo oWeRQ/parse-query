@@ -1,0 +1,10 @@
+{
+	"name": "parse/parse",
+	"description": "jQuery-like PHP DOM",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Parse\\": ""
+		}
+	}
+}

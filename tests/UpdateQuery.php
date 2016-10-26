@@ -1,6 +1,8 @@
 <?php
 
-require_once '../UpdateQuery.php';
+require_once '../vendor/autoload.php';
+
+use Parse\UpdateQuery;
 
 $page = UpdateQuery::fetch('fixtures/page1.html');
 $form = $page->find('form');

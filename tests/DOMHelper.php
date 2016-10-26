@@ -1,6 +1,8 @@
 <?php
 
-require_once '../DOMHelper.php';
+require_once '../vendor/autoload.php';
+
+use Parse\DOMHelper;
 
 $xpath = DOMHelper::htmlXPath(file_get_contents('fixtures/page1.html'));
 

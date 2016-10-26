@@ -1,9 +1,6 @@
 <?php
 
-require_once 'DOMHelper.php';
-require_once 'RequestHelper.php';
-require_once 'SelectorHelper.php';
-require_once 'XPathQuery.php';
+namespace Parse;
 
 /**
  * jQuery like select and process DOM nodes

@@ -1,5 +1,7 @@
 <?php
 
+namespace Parse;
+
 /**
  * HTTP request helper
  */

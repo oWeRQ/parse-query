@@ -1,5 +1,7 @@
 <?php
 
+namespace Parse;
+
 /**
  * Php DOM helper
  */
@@ -19,10 +21,10 @@ class DOMHelper
 			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 		}
 		
-		$doc = new DOMDocument();
+		$doc = new \DOMDocument();
 		@$doc->loadHTML($html);
 
-		return new DOMXpath($doc);
+		return new \DOMXpath($doc);
 	}
 
 	/**
@@ -32,12 +34,12 @@ class DOMHelper
 	 *
 	 * @return string
 	 */
-	public static function outerHtml(DOMNode $node)
+	public static function outerHtml(\DOMNode $node)
 	{
 		if ($node->nodeType === XML_TEXT_NODE)
 			return $node->textContent;
 
-		if ($node instanceof DOMDocument)
+		if ($node instanceof \DOMDocument)
 			return $node->saveHTML();
 
 		return $node->ownerDocument->saveHTML($node);
@@ -50,12 +52,12 @@ class DOMHelper
 	 *
 	 * @return string
 	 */
-	public static function innerHtml(DOMNode $node)
+	public static function innerHtml(\DOMNode $node)
 	{
 		if ($node->nodeType === XML_TEXT_NODE)
 			return $node->textContent;
 
-		if ($node instanceof DOMDocument)
+		if ($node instanceof \DOMDocument)
 			return $node->saveHTML();
 
 		$html = '';
@@ -75,9 +77,9 @@ class DOMHelper
 	 *
 	 * @return boolean
 	 */
-	public static function setInnerHtml(DOMNode $node, $value)
+	public static function setInnerHtml(\DOMNode $node, $value)
 	{
-		if ($node instanceof DOMDocument) {
+		if ($node instanceof \DOMDocument) {
 			return @$node->loadHTML($value);
 		}
 
@@ -90,7 +92,7 @@ class DOMHelper
 
 			return true;
 		} else {
-			$doc = new DOMDocument();
+			$doc = new \DOMDocument();
 
 			if (@$doc->loadHTML($value)) {
 				$body = $doc->getElementsByTagName('body')->item(0);
@@ -113,7 +115,7 @@ class DOMHelper
 	 *
 	 * @return void
 	 */
-	public static function removeChildNodes(DOMNode $node)
+	public static function removeChildNodes(\DOMNode $node)
 	{
 		for ($i = $node->childNodes->length - 1; $i >= 0; $i--) {
 			$node->removeChild($node->childNodes->item($i));
@@ -127,7 +129,7 @@ class DOMHelper
 	 *
 	 * @return string[]
 	 */
-	public static function getAttributes(DOMNode $node)
+	public static function getAttributes(\DOMNode $node)
 	{
 		$attributes = [];
 

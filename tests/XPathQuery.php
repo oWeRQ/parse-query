@@ -1,6 +1,8 @@
 <?php
 
-require_once '../XPathQuery.php';
+require_once '../vendor/autoload.php';
+
+use Parse\XPathQuery;
 
 //$doc = ParseHelper::htmlXPath(file_get_contents('fixtures/page1.html'))->document;
 $doc = new DOMDocument();

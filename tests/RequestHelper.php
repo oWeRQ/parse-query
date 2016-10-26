@@ -1,6 +1,8 @@
 <?php
 
-require_once '../RequestHelper.php';
+require_once '../vendor/autoload.php';
+
+use Parse\RequestHelper;
 
 $root = 'http://jsonplaceholder.typicode.com';
 

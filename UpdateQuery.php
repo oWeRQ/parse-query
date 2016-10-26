@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ParseQuery.php';
+namespace Parse;
 
 /**
  * jQuery like select, process and update DOM nodes

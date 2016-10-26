@@ -1,5 +1,7 @@
 <?php
 
+namespace Parse;
+
 /**
  * CSS selector helper
  */
