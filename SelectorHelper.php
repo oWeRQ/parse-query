@@ -1,7 +1,18 @@
 <?php
 
+/**
+ * CSS selector helper
+ */
 class SelectorHelper
 {
+	/**
+	 * Convert CSS Selector with pseudo and conditions to XPath expression
+	 *
+	 * @param string $selector CSS Selector
+	 * @param string $prefix XPath expression
+	 *
+	 * @return string
+	 */
 	public static function toXPath($selector, $prefix = 'descendant::')
 	{
 		$holders = [];
@@ -18,6 +29,14 @@ class SelectorHelper
 		return $selector;
 	}
 
+	/**
+	 * Convert plain CSS Selector to XPath expression
+	 *
+	 * @param string $selector CSS Selector
+	 * @param string $prefix XPath expression
+	 *
+	 * @return string
+	 */
 	public static function toXPathPlain($selector, $prefix = 'descendant::')
 	{
 		$xpaths = [];
@@ -32,6 +51,13 @@ class SelectorHelper
 		return implode('|', $xpaths);
 	}
 
+	/**
+	 * Convert single CSS Selector to XPath expression
+	 *
+	 * @param string $selector CSS Selector
+	 *
+	 * @return string
+	 */
 	public static function toXPathSingle($selector)
 	{
 		$replace = [
@@ -52,7 +78,15 @@ class SelectorHelper
 		return $selector;
 	}
 
-	public static function holdXPathPseudo($selector, &$holders)
+	/**
+	 * Replace with holders pseudo
+	 *
+	 * @param string $selector CSS Selector
+	 * @param string[] $holders Holders array
+	 *
+	 * @return string
+	 */
+	public static function holdXPathPseudo($selector, array &$holders)
 	{
 		$pattern = ':([-\w]+)\(([^()]*)\)';
 
@@ -77,7 +111,15 @@ class SelectorHelper
 		return $selector;
 	}
 
-	public static function holdXPathConditions($selector, &$holders)
+	/**
+	 * Replace with holders conditions
+	 *
+	 * @param string $selector CSS Selector
+	 * @param string[] $holders Holders array
+	 *
+	 * @return string
+	 */
+	public static function holdXPathConditions($selector, array &$holders)
 	{
 		$pattern = implode('\s*', [
 			'\[',

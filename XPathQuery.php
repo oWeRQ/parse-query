@@ -1,10 +1,31 @@
 <?php
 
+/**
+ * Php DOM node and xpath wrapper
+ *
+ * Implements base interface like jQuery
+ */
 class XPathQuery implements \IteratorAggregate, \Countable
 {
+	/**
+	 * Array of DOMNode
+	 *
+	 * @var \DOMNode[] $nodes
+	 */
 	private $nodes = [];
+
+	/**
+	 * Set by Constructor
+	 *
+	 * @var \DOMXPath $xpath
+	 */
 	private $xpath;
 
+	/**
+	 * Get interator with self objects per node
+	 *
+	 * @return \ArrayIterator
+	 */
 	public function getIterator()
 	{
 		$nodes = [];
@@ -16,6 +37,12 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		return new \ArrayIterator($nodes);
 	}
 
+	/**
+	 * Constructor
+	 *
+	 * @param \XPathQuery|\DOMNode|\DOMNode[]|\DOMNodeList $nodes
+	 * @param \DOMXPath|null $xpath
+	 */
 	public function __construct($nodes = null, \DOMXPath $xpath = null)
 	{
 		if ($nodes instanceof self) {
@@ -41,11 +68,23 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		}
 	}
 
+	/**
+	 * Get nodes count
+	 * 
+	 * @return int
+	 */
 	public function count()
 	{
 		return count($this->nodes);
 	}
 
+	/**
+	 * Get node by index
+	 *
+	 * @param int $index If negative return from end
+	 *
+	 * @return \DOMNode
+	 */
 	public function get($index = null)
 	{
 		if ($index === null)
@@ -60,11 +99,25 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		return $this->nodes[$index];
 	}
 
+	/**
+	 * Get new instance with node by index
+	 *
+	 * @param int $index If negative return from end
+	 *
+	 * @return self
+	 */
 	public function eq($index)
 	{
 		return new static(static::get($index), $this->xpath);
 	}
 
+	/**
+	 * Get new instance with map result
+	 *
+	 * @param callable $callback Callback($node, $index)
+	 *
+	 * @return self
+	 */
 	public function map(callable $callback)
 	{
 		$result = array_map($callback, $this->nodes, array_keys($this->nodes));
@@ -72,6 +125,14 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		return new static($result, $this->xpath);
 	}
 
+	/**
+	 * Get new instance with xpathQuery result of all nodes
+	 *
+	 * @param string $expression XPath expression
+	 * @param int $limit Max result nodes
+	 *
+	 * @return self
+	 */
 	public function xpath($expression, $limit = 0)
 	{
 		$result = [];
@@ -88,6 +149,17 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		return new static($result, $this->xpath);
 	}
 
+	/**
+	 * Call XPath query with Exception
+	 *
+	 * @param string $expression XPath expression
+	 * @param \DOMNode $contextnode Optional contextnode for relative XPath queries
+	 * @param boolean $registerNodeNS Automatic registration of the context node
+	 *
+	 * @throws \Exception On any E_WARNING
+	 *
+	 * @return \DOMNodeList
+	 */
 	public function xpathQuery($expression, \DOMNode $contextnode = null, $registerNodeNS = true)
 	{
 		set_error_handler(function($errno, $errstr) use($expression){
@@ -102,6 +174,13 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		return $result;
 	}
 
+	/**
+	 * Magic get property or attribute
+	 *
+	 * @param string $name First node property or attribute name
+	 *
+	 * @return string|null
+	 */
 	public function __get($name)
 	{
 		if ($node = $this->get(0)) {

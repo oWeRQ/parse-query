@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * HTTP request helper
+ */
 class RequestHelper
 {
+	/**
+	 * Build headers to string
+	 *
+	 * @param mixed $headers String or string-array or hash-array
+	 *
+	 * @return string
+	 */
 	public static function buildHeaders($headers)
 	{
 		if (is_string($headers))
@@ -14,6 +24,21 @@ class RequestHelper
 		return implode("\r\n", $headers);
 	}
 
+	/**
+	 * Parse headers (e.g. $http_response_header)
+	 *
+	 * Example
+     *
+	 * Input:
+	 * ['Content-Type' => 'text/plain', 'Content-Type: text/html']
+	 *
+	 * Output:
+	 * ['Content-Type' => ['text/plain', 'text/html']]
+	 *
+	 * @param mixed $rawHeaders String or string-array or hash-array
+	 *
+	 * @return mixed[]
+	 */
 	public static function parseHeaders($rawHeaders)
 	{
 		if (!is_array($rawHeaders)) {
@@ -46,6 +71,11 @@ class RequestHelper
 		return $headers;
 	}
 
+	/**
+	 * Get available to write dir for request cache
+	 *
+	 * @return string
+	 */
 	public static function cacheDir()
 	{
 		$dirname = 'cache/';
@@ -57,6 +87,15 @@ class RequestHelper
 		return $dirname;
 	}
 
+	/**
+	 * Get response data from cache
+	 *
+	 * @param string $name Record name
+	 * @param string $type Values: default|no-cache|force-cache
+	 * @param int $time Seconds
+	 *
+	 * @return array|false
+	 */
 	public static function cacheGet($name, $type = 'default', $time = 3600)
 	{
 		if ($type === 'no-cache')
@@ -71,6 +110,15 @@ class RequestHelper
 		return false;
 	}
 
+	/**
+	 * Put response data to cache
+	 *
+	 * @param string $name Record name
+	 * @param array $data Record data
+	 * @param string $type Values: default|no-cache|force-cache
+	 *
+	 * @return void
+	 */
 	public static function cachePut($name, $data, $type = 'default')
 	{
 		if ($type === 'no-cache')
@@ -85,6 +133,13 @@ class RequestHelper
 		}
 	}
 
+	/**
+	 * Convert fetch-like options to stream_context_create() options
+	 * 
+	 * @param array $options Fetch-like options
+	 * 
+	 * @return array
+	 */
 	public static function contextOptions(array $options = [])
 	{
 		$http = (isset($options['http']) && is_array($options['http']) ? $options['http'] : []);
@@ -102,6 +157,14 @@ class RequestHelper
 		];
 	}
 
+	/**
+	 * Process response
+	 *
+	 * @param array $response Has keys: string text, array error, array headers
+	 * @param array $options Fetch-like options
+	 *
+	 * @return void
+	 */
 	public static function processResponse(array &$response, array $options = [])
 	{
 		preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', array_shift($response['headers']), $status);
@@ -139,6 +202,14 @@ class RequestHelper
 		}
 	}
 
+	/**
+	 * Fetch like JS
+	 *
+	 * @param string $url Request url or file path
+	 * @param array $options Fetch-like options
+	 *
+	 * @return object
+	 */
 	public static function fetch($url, array $options = [])
 	{
 		$response = [
