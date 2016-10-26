@@ -1,6 +1,8 @@
 <?php
 
-require_once '../ParseQuery.php';
+require_once '../vendor/autoload.php';
+
+use Parse\ParseQuery;
 
 $dateQuery = './/div[@id="new_sd_list"]/div[@style="float:right;font-family:arial;font-size:18px;color:#000000"]';
 

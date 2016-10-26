@@ -1,6 +1,8 @@
 <?php
 
-require_once '../ParseQuery.php';
+require_once '../vendor/autoload.php';
+
+use Parse\ParseQuery;
 
 if ($argc < 2) {
 	die("Usage: php {$argv[0]} <url>\n");
