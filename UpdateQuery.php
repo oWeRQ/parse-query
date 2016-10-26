@@ -2,9 +2,20 @@
 
 require_once 'ParseQuery.php';
 
+/**
+ * jQuery like select, process and update DOM nodes
+ */
 class UpdateQuery extends ParseQuery
 {
-	public function attr($name, $value = null)
+	/**
+	 * Set attribute for every
+	 *
+	 * @param string $name Attribute name
+	 * @param string $value Attribute value
+	 *
+	 * @return self
+	 */
+	public function attr($name = null, $value = null)
 	{
 		if ($value === null) {
 			return parent::attr($name);
@@ -17,6 +28,13 @@ class UpdateQuery extends ParseQuery
 		return $this;
 	}
 
+	/**
+	 * Set textContent for every
+	 *
+	 * @param string $value Text value
+	 *
+	 * @return self
+	 */
 	public function text($value = null)
 	{
 		if ($value === null) {
@@ -30,6 +48,13 @@ class UpdateQuery extends ParseQuery
 		return $this;
 	}
 
+	/**
+	 * Set inner html for every
+	 *
+	 * @param string $value Html value
+	 *
+	 * @return self
+	 */
 	public function html($value = null)
 	{
 		if ($value === null) {
@@ -43,6 +68,11 @@ class UpdateQuery extends ParseQuery
 		return $this;
 	}
 
+	/**
+	 * Remove from dom
+	 *
+	 * @return self
+	 */
 	public function remove()
 	{
 		foreach ($this->get() as $node) {
@@ -52,6 +82,11 @@ class UpdateQuery extends ParseQuery
 		return $this;
 	}
 
+	/**
+	 * Remove all childs for every
+	 *
+	 * @return self
+	 */
 	public function __empty()
 	{
 		foreach ($this->get() as $node) {
@@ -61,6 +96,14 @@ class UpdateQuery extends ParseQuery
 		return $this;
 	}
 
+	/**
+	 * Workaround reserved function names
+	 *
+	 * @param string $name
+	 * @param array $arguments
+	 *
+	 * @return mixed
+	 */
 	public function __call($name, array $arguments)
 	{
 		if ($name === 'empty') {
