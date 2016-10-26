@@ -3,25 +3,17 @@
 namespace Parse;
 
 /**
- * Php DOM node and xpath wrapper
+ * PHP DOM node and xpath wrapper
  *
  * Implements base interface like jQuery
  */
 class XPathQuery implements \IteratorAggregate, \Countable
 {
-	/**
-	 * Array of DOMNode
-	 *
-	 * @var \DOMNode[] $nodes
-	 */
+	/** @var \DOMNode[] Array of DOMNode, use get() method to read */
 	private $nodes = [];
 
-	/**
-	 * Set by Constructor
-	 *
-	 * @var \DOMXPath $xpath
-	 */
-	private $xpath;
+	/** @var \DOMXPath Set by Constructor */
+	private $xpath = null;
 
 	/**
 	 * Get interator with self objects per node
@@ -43,7 +35,7 @@ class XPathQuery implements \IteratorAggregate, \Countable
 	 * Constructor
 	 *
 	 * @param \XPathQuery|\DOMNode|\DOMNode[]|\DOMNodeList $nodes
-	 * @param \DOMXPath|null $xpath
+	 * @param \DOMXPath $xpath
 	 */
 	public function __construct($nodes = null, \DOMXPath $xpath = null)
 	{

@@ -10,7 +10,7 @@ class RequestHelper
 	/**
 	 * Build headers to string
 	 *
-	 * @param mixed $headers String or string-array or hash-array
+	 * @param string|string[int]|string[string] $headers String or string-array or hash-array
 	 *
 	 * @return string
 	 */
@@ -37,9 +37,9 @@ class RequestHelper
 	 * Output:
 	 * ['Content-Type' => ['text/plain', 'text/html']]
 	 *
-	 * @param mixed $rawHeaders String or string-array or hash-array
+	 * @param string|string[int]|string[string] $rawHeaders String or string-array or hash-array
 	 *
-	 * @return mixed[]
+	 * @return (string|string[int])[string]
 	 */
 	public static function parseHeaders($rawHeaders)
 	{
@@ -205,7 +205,7 @@ class RequestHelper
 	}
 
 	/**
-	 * Fetch like JS
+	 * Fetch JS-like
 	 *
 	 * @param string $url Request url or file path
 	 * @param array $options Fetch-like options

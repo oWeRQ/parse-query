@@ -3,7 +3,9 @@
 namespace Parse;
 
 /**
- * jQuery like select, process and update DOM nodes
+ * jQuery-like select, process and update DOM nodes
+ *
+ * @method self empty()
  */
 class UpdateQuery extends ParseQuery
 {

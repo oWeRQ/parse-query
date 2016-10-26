@@ -3,17 +3,19 @@
 namespace Parse;
 
 /**
- * jQuery like select and process DOM nodes
+ * jQuery-like select and process DOM nodes
  */
 class ParseQuery extends XPathQuery
 {
 	/**
-	 * Fetch like JS (see RequestHelper::fetch())
+	 * Fetch JS-like
 	 *
 	 * @param string $url Request url or file path
 	 * @param array $options Fetch-like options
 	 *
 	 * @return self
+	 *
+	 * @see RequestHelper::fetch() Shortcut
 	 */
 	public static function fetch($url, array $options = [])
 	{

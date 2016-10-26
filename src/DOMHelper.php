@@ -3,17 +3,17 @@
 namespace Parse;
 
 /**
- * Php DOM helper
+ * PHP DOM helper
  */
 class DOMHelper
 {
 	/**
-	 * Load html and return DOMXpath
+	 * Load html and return DOMXPath
 	 *
 	 * @param string $html Html
 	 * @param boolean $isUtf8 Is convert utf8 to html entities
 	 *
-	 * @return \DOMXpath
+	 * @return \DOMXPath
 	 */
 	public static function htmlXPath($html, $isUtf8 = true)
 	{
@@ -24,7 +24,7 @@ class DOMHelper
 		$doc = new \DOMDocument();
 		@$doc->loadHTML($html);
 
-		return new \DOMXpath($doc);
+		return new \DOMXPath($doc);
 	}
 
 	/**

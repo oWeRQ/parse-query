@@ -1,2 +1,2 @@
 apigen:
-	apigen generate --config apigen.yaml
+	yes | apigen generate --config apigen.yaml

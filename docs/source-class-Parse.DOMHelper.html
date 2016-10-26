@@ -90,17 +90,17 @@
 </span><span id="3" class="l"><span class="php-keyword1">namespace</span> Parse;
 </span><span id="4" class="l">
 </span><span id="5" class="l"><span class="php-comment">/**
-</span></span><span id="6" class="l"><span class="php-comment"> * Php DOM helper
+</span></span><span id="6" class="l"><span class="php-comment"> * PHP DOM helper
 </span></span><span id="7" class="l"><span class="php-comment"> */</span>
 </span><span id="8" class="l"><span class="php-keyword1">class</span> DOMHelper
 </span><span id="9" class="l">{
 </span><span id="10" class="l">    <span class="php-comment">/**
-</span></span><span id="11" class="l"><span class="php-comment">     * Load html and return DOMXpath
+</span></span><span id="11" class="l"><span class="php-comment">     * Load html and return DOMXPath
 </span></span><span id="12" class="l"><span class="php-comment">     *
 </span></span><span id="13" class="l"><span class="php-comment">     * @param string $html Html
 </span></span><span id="14" class="l"><span class="php-comment">     * @param boolean $isUtf8 Is convert utf8 to html entities
 </span></span><span id="15" class="l"><span class="php-comment">     *
-</span></span><span id="16" class="l"><span class="php-comment">     * @return \DOMXpath
+</span></span><span id="16" class="l"><span class="php-comment">     * @return \DOMXPath
 </span></span><span id="17" class="l"><span class="php-comment">     */</span>
 </span><span id="18" class="l">    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> htmlXPath(<span class="php-var">$html</span>, <span class="php-var">$isUtf8</span> = <span class="php-keyword1">true</span>)
 </span><span id="19" class="l">    {
@@ -111,7 +111,7 @@
 </span><span id="24" class="l">        <span class="php-var">$doc</span> = <span class="php-keyword1">new</span> \DOMDocument();
 </span><span id="25" class="l">        @<span class="php-var">$doc</span>-&gt;loadHTML(<span class="php-var">$html</span>);
 </span><span id="26" class="l">
-</span><span id="27" class="l">        <span class="php-keyword1">return</span> <span class="php-keyword1">new</span> \DOMXpath(<span class="php-var">$doc</span>);
+</span><span id="27" class="l">        <span class="php-keyword1">return</span> <span class="php-keyword1">new</span> \DOMXPath(<span class="php-var">$doc</span>);
 </span><span id="28" class="l">    }
 </span><span id="29" class="l">
 </span><span id="30" class="l">    <span class="php-comment">/**
