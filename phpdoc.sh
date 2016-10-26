@@ -1,3 +1,3 @@
 #!/bin/sh
 
-phpdoc -d . -t phpdoc -i examples/,exclude/,tests/
+phpdoc -d src/ -t phpdoc
