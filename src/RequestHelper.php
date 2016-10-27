@@ -160,17 +160,36 @@ class RequestHelper
 	}
 
 	/**
+	 * Get contents with error and headers
+	 *
+	 * @param string $url Request url or file path
+	 * @param array $contextOptions Options for stream_context_create()
+	 *
+	 * @return mixed[string]
+	 */
+	public static function getContents($url, array $contextOptions = [])
+	{
+		$response = [];
+
+		$response['text'] = @file_get_contents($url, false, stream_context_create($contextOptions));
+		$response['error'] = ($response['text'] === false ? error_get_last()['message'] : false);
+		$response['headers'] = isset($http_response_header) ? static::parseHeaders($http_response_header) : [];
+
+		return $response;
+	}
+
+	/**
 	 * Process response
 	 *
 	 * @param array $response Has keys: string text, array error, array headers
 	 * @param array $options Fetch-like options
 	 *
-	 * @return void
+	 * @return mixed[string]
 	 */
-	public static function processResponse(array &$response, array $options = [])
+	public static function processResponse(array $response, array $options = [])
 	{
-		preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', array_shift($response['headers']), $status);
-		if (count($status) > 2) {
+		if (preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', $response['headers'][0], $status)) {
+			unset($response['headers'][0]);
 			list(, $response['status'], $response['statusText']) = $status;
 		}
 
@@ -195,13 +214,15 @@ class RequestHelper
 			$response['charset'] = $options['charset'];
 		}
 
-		if ($response['charset']) {
+		if (isset($response['charset'])) {
 			$response['text'] = mb_convert_encoding($response['text'], mb_internal_encoding(), $response['charset']);
 		}
 
-		if ($response['contentType'] === 'application/json') {
+		if (isset($response['contentType']) && $response['contentType'] === 'application/json') {
 			$response['json'] = json_decode($response['text'], true);
 		}
+
+		return $response;
 	}
 
 	/**
@@ -226,7 +247,7 @@ class RequestHelper
 		];
 
 		$cache = (isset($options['cache']) ? $options['cache'] : 'default');
-		//unset($options['cache']);
+		unset($options['cache']);
 
 		$name = md5($url).'.'.md5(json_encode($options));
 		if (($responseCache = static::cacheGet($name, $cache)) !== false) {
@@ -235,11 +256,9 @@ class RequestHelper
 
 		$contextOptions = static::contextOptions($options);
 
-		$response['text'] = @file_get_contents($url, false, stream_context_create($contextOptions));
-		$response['error'] = ($response['text'] === false ? error_get_last()['message'] : false);
-		$response['headers'] = isset($http_response_header) ? static::parseHeaders($http_response_header) : [];
+		$response = array_merge($response, static::getContents($url, $contextOptions));
 
-		static::processResponse($response, $options);
+		$response = static::processResponse($response, $options);
 
 		if ($response['status'] !== false && $contextOptions['http']['method'] === 'GET') {
 			static::cachePut($name, $response, $cache);
