@@ -13,21 +13,22 @@ class SelectorHelperTest extends TestCase
 	/**
 	 * Test convert CSS selectors
 	 *
+	 * @param $selector CSS selector
+	 * @param $expression XPath expression
+	 *
 	 * @dataProvider selectorsProvider
 	 */
-	public function testSelector($selector, $expected)
+	public function testSelector($selector, $expression)
 	{
-		$expression = SelectorHelper::toXPath($selector);
-
-		$this->assertEquals($expected, $expression);
-
-		return array($expression, $selector);
+		$this->assertEquals($expression, SelectorHelper::toXPath($selector));
 	}
 
 	/**
 	 * Test expected expression valid
 	 *
-	 * @depends testSelector
+	 * @param $selector CSS selector
+	 * @param $expression XPath expression
+	 *
 	 * @dataProvider selectorsProvider
 	 */
 	public function testExpression($selector, $expression)
@@ -38,6 +39,8 @@ class SelectorHelperTest extends TestCase
 
 	/**
 	 * Load selectors from fixtures
+	 *
+	 * @return array[]
 	 */
 	public function selectorsProvider()
 	{
