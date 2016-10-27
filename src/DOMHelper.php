@@ -8,7 +8,7 @@ namespace Parse;
 class DOMHelper
 {
 	/**
-	 * Load html and return DOMXPath
+	 * Load HTML and return DOMXPath
 	 *
 	 * @param string $html Html
 	 * @param boolean $isUtf8 Is convert utf8 to html entities
@@ -28,7 +28,7 @@ class DOMHelper
 	}
 
 	/**
-	 * Get outer html
+	 * Get outer HTML
 	 *
 	 * @param DOMNode $node Element or text node or document
 	 *
@@ -46,7 +46,7 @@ class DOMHelper
 	}
 
 	/**
-	 * Get inner html
+	 * Get inner HTML
 	 *
 	 * @param DOMNode $node Element or text node or document
 	 *
@@ -70,7 +70,7 @@ class DOMHelper
 	}
 
 	/**
-	 * Set inner html
+	 * Set inner HTML
 	 *
 	 * @param DOMNode $node Element or text node or document
 	 * @param string $value
@@ -147,7 +147,7 @@ class DOMHelper
 	 *
 	 * @return string
 	 */
-	public static function nodeToString(DOMElement $node)
+	public static function nodeToString(\DOMElement $node)
 	{
 		$id = $node->getAttribute('id');
 		$class = $node->getAttribute('class');
