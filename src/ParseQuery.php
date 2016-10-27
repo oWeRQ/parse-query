@@ -216,6 +216,6 @@ class ParseQuery extends XPathQuery
 	 */
 	public function __toString()
 	{
-		return $this->count().' in ['.implode(', ', array_map(['DOMHelper', 'nodeToString'], $this->get())).']';
+		return $this->count().' in ['.implode(', ', array_map([DOMHelper::class, 'nodeToString'], $this->get())).']';
 	}
 }

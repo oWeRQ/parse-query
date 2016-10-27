@@ -29,7 +29,7 @@ class XPathQueryTest extends TestCase
 	 * @expectedException Exception
 	 * @depends testConstruct
 	 */
-	public function testXpathQuery($document)
+	public function testXpathQuery(XPathQuery $document)
 	{
 		$document->xpathQuery('self::');
 	}
@@ -39,7 +39,7 @@ class XPathQueryTest extends TestCase
 	 *
 	 * @depends testConstruct
 	 */
-	public function testXpath($document)
+	public function testXpath(XPathQuery $document)
 	{
 		$smalls = $document->xpath('descendant::small');
 		$this->assertInstanceOf(XPathQuery::class, $smalls);
@@ -84,7 +84,7 @@ class XPathQueryTest extends TestCase
 	 *
 	 * @depends testConstruct
 	 */
-	public function testEq($document)
+	public function testEq(XPathQuery $document)
 	{
 		$this->assertNotSame($document->eq(0), $document->eq(0));
 		$this->assertSame($document->eq(0)->get(0), $document->eq(0)->get(0));

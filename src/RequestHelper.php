@@ -188,7 +188,7 @@ class RequestHelper
 	 */
 	public static function processResponse(array $response, array $options = [])
 	{
-		if (preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', $response['headers'][0], $status)) {
+		if (isset($response['headers'][0]) && preg_match('/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/', $response['headers'][0], $status)) {
 			unset($response['headers'][0]);
 			list(, $response['status'], $response['statusText']) = $status;
 		}
@@ -214,11 +214,11 @@ class RequestHelper
 			$response['charset'] = $options['charset'];
 		}
 
-		if (isset($response['charset'])) {
+		if (!empty($response['charset'])) {
 			$response['text'] = mb_convert_encoding($response['text'], mb_internal_encoding(), $response['charset']);
 		}
 
-		if (isset($response['contentType']) && $response['contentType'] === 'application/json') {
+		if (!empty($response['contentType']) && $response['contentType'] === 'application/json') {
 			$response['json'] = json_decode($response['text'], true);
 		}
 

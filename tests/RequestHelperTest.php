@@ -135,18 +135,18 @@ class RequestHelperTest extends TestCase
 		$response = RequestHelper::processResponse([
 			'headers' => [
 				0 => 'HTTP/1.1 200 OK',
-				'Content-Type' => 'application/json; charset=utf-8',
+				'Content-Type' => 'application/json; charset=UTF-8',
 			],
 			'text' => '{"foo":"bar"}',
 		]);
 
 		$this->assertEquals([
-			'headers' => ['Content-Type' => 'application/json; charset=utf-8'],
+			'headers' => ['Content-Type' => 'application/json; charset=UTF-8'],
 			'text' => '{"foo":"bar"}',
 			'status' => '200',
 			'statusText' => 'OK',
 			'contentType' => 'application/json',
-			'charset' => 'utf-8',
+			'charset' => 'UTF-8',
 			'json' => ['foo' => 'bar'],
 		], $response);
 	}
@@ -156,7 +156,7 @@ class RequestHelperTest extends TestCase
 	 *
 	 * @todo Add cache test
 	 */
-	public function testFetch()
+	public function _testFetch()
 	{
 		$root = 'http://jsonplaceholder.typicode.com';
 
