@@ -300,7 +300,7 @@
 </span></span><span id="188" class="l"><span class="php-comment">     */</span>
 </span><span id="189" class="l">    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> processResponse(<span class="php-keyword1">array</span> <span class="php-var">$response</span>, <span class="php-keyword1">array</span> <span class="php-var">$options</span> = [])
 </span><span id="190" class="l">    {
-</span><span id="191" class="l">        <span class="php-keyword1">if</span> (<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/'</span>, <span class="php-var">$response</span>[<span class="php-quote">'headers'</span>][<span class="php-num">0</span>], <span class="php-var">$status</span>)) {
+</span><span id="191" class="l">        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$response</span>[<span class="php-quote">'headers'</span>][<span class="php-num">0</span>]) &amp;&amp; <span class="php-keyword2">preg_match</span>(<span class="php-quote">'/^HTTP\/\d+\.\d+ (\d+)\s*(.*)$/'</span>, <span class="php-var">$response</span>[<span class="php-quote">'headers'</span>][<span class="php-num">0</span>], <span class="php-var">$status</span>)) {
 </span><span id="192" class="l">            <span class="php-keyword1">unset</span>(<span class="php-var">$response</span>[<span class="php-quote">'headers'</span>][<span class="php-num">0</span>]);
 </span><span id="193" class="l">            <span class="php-keyword1">list</span>(, <span class="php-var">$response</span>[<span class="php-quote">'status'</span>], <span class="php-var">$response</span>[<span class="php-quote">'statusText'</span>]) = <span class="php-var">$status</span>;
 </span><span id="194" class="l">        }
@@ -326,11 +326,11 @@
 </span><span id="214" class="l">            <span class="php-var">$response</span>[<span class="php-quote">'charset'</span>] = <span class="php-var">$options</span>[<span class="php-quote">'charset'</span>];
 </span><span id="215" class="l">        }
 </span><span id="216" class="l">
-</span><span id="217" class="l">        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$response</span>[<span class="php-quote">'charset'</span>])) {
+</span><span id="217" class="l">        <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$response</span>[<span class="php-quote">'charset'</span>])) {
 </span><span id="218" class="l">            <span class="php-var">$response</span>[<span class="php-quote">'text'</span>] = <span class="php-keyword2">mb_convert_encoding</span>(<span class="php-var">$response</span>[<span class="php-quote">'text'</span>], <span class="php-keyword2">mb_internal_encoding</span>(), <span class="php-var">$response</span>[<span class="php-quote">'charset'</span>]);
 </span><span id="219" class="l">        }
 </span><span id="220" class="l">
-</span><span id="221" class="l">        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$response</span>[<span class="php-quote">'contentType'</span>]) &amp;&amp; <span class="php-var">$response</span>[<span class="php-quote">'contentType'</span>] === <span class="php-quote">'application/json'</span>) {
+</span><span id="221" class="l">        <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$response</span>[<span class="php-quote">'contentType'</span>]) &amp;&amp; <span class="php-var">$response</span>[<span class="php-quote">'contentType'</span>] === <span class="php-quote">'application/json'</span>) {
 </span><span id="222" class="l">            <span class="php-var">$response</span>[<span class="php-quote">'json'</span>] = <span class="php-keyword2">json_decode</span>(<span class="php-var">$response</span>[<span class="php-quote">'text'</span>], <span class="php-keyword1">true</span>);
 </span><span id="223" class="l">        }
 </span><span id="224" class="l">
