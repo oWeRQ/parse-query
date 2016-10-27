@@ -17,8 +17,9 @@ class ParseQueryTest extends TestCase
 	{
 		$document = ParseQuery::fetch(__DIR__.'/fixtures/page1.html');
 
-		$this->assertCount(1, $document);
+		$this->assertInstanceOf(ParseQuery::class, $document);
 		$this->assertInstanceOf(\DOMDocument::class, $document->get(0));
+		$this->assertCount(1, $document);
 
 		return $document;
 	}
