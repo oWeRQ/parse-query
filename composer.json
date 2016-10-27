@@ -4,7 +4,8 @@
 	"license": "MIT",
 	"autoload": {
 		"psr-4": {
-			"Parse\\": "src/"
+			"Parse\\": "src/",
+			"Parse\\Tests\\": "tests/"
 		}
 	}
 }
