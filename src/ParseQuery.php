@@ -116,7 +116,7 @@ class ParseQuery extends XPathQuery
 	{
 		return $this->map(function($node){
 			while ($node = $node->previousSibling) {
-				if ($node->nodeType !== 3)
+				if ($node->nodeType !== XML_TEXT_NODE)
 					return $node;
 			}
 		});
@@ -131,7 +131,7 @@ class ParseQuery extends XPathQuery
 	{
 		return $this->map(function($node){
 			while ($node = $node->nextSibling) {
-				if ($node->nodeType !== 3)
+				if ($node->nodeType !== XML_TEXT_NODE)
 					return $node;
 			}
 		});

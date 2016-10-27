@@ -208,9 +208,9 @@ class RequestHelper
 	 * Fetch JS-like
 	 *
 	 * @param string $url Request url or file path
-	 * @param array $options Fetch-like options
+	 * @param array $options Fetch-like options: cache, http, method, body, headers, contentType, charset
 	 *
-	 * @return object
+	 * @return \stdClass Has properties: error, status, statusText, headers, contentType, charset, text, json
 	 */
 	public static function fetch($url, array $options = [])
 	{

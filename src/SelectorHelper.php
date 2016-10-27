@@ -8,7 +8,7 @@ namespace Parse;
 class SelectorHelper
 {
 	/**
-	 * Convert CSS Selector with pseudo and conditions to XPath expression
+	 * Convert CSS selector with pseudo and conditions to XPath expression
 	 *
 	 * @param string $selector CSS Selector
 	 * @param string $prefix XPath expression
@@ -32,7 +32,7 @@ class SelectorHelper
 	}
 
 	/**
-	 * Convert plain CSS Selector to XPath expression
+	 * Convert plain CSS selector to XPath expression
 	 *
 	 * @param string $selector CSS Selector
 	 * @param string $prefix XPath expression
@@ -54,7 +54,7 @@ class SelectorHelper
 	}
 
 	/**
-	 * Convert single CSS Selector to XPath expression
+	 * Convert single CSS selector to XPath expression
 	 *
 	 * @param string $selector CSS Selector
 	 *

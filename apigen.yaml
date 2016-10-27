@@ -3,3 +3,4 @@ destination: ./docs
 accessLevels: [public,protected,private]
 templateTheme: bootstrap
 tree: true
+php: true

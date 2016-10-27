@@ -34,7 +34,7 @@ class XPathQuery implements \IteratorAggregate, \Countable
 	/**
 	 * Constructor
 	 *
-	 * @param \XPathQuery|\DOMNode|\DOMNode[]|\DOMNodeList $nodes
+	 * @param self|\DOMNode|\DOMNode[]|\DOMNodeList $nodes
 	 * @param \DOMXPath $xpath
 	 */
 	public function __construct($nodes = null, \DOMXPath $xpath = null)
