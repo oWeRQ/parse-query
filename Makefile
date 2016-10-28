@@ -4,7 +4,7 @@ composer:
 	composer install
 
 phpunit:
-	phpunit
+	vendor/bin/phpunit
 
 apigen:
-	yes | apigen generate --config apigen.yaml
+	yes | vendor/bin/apigen generate --config apigen.yaml
