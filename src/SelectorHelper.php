@@ -97,7 +97,7 @@ class SelectorHelper
 
 			if ($func === 'not') $cond = '[not('.static::toXPath($value, 'self::').')]';
 			elseif ($func === 'has') $cond = '['.static::toXPath($value, 'descendant::').']';
-			elseif ($func === 'eq') $cond = '['.($value < 0 ? 'last()-' : '').abs($value + 1).']';
+			elseif ($func === 'eq') $cond = '['.($value < 0 ? 'last()' : '').($value + 1 ?: '').']';
 			elseif ($func === 'lt') $cond = '[position()'.($value < 0 ? '-last()' : '').'<'.($value + 1).']';
 			elseif ($func === 'gt') $cond = '[position()'.($value < 0 ? '-last()' : '').'>'.($value + 1).']';
 			elseif ($func === 'contains') $cond = '[contains(text(),'.$value.')]';

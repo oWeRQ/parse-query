@@ -6,7 +6,7 @@ return [
 	[':has(b)', 'descendant::*[descendant::b]'],
 	[':eq(0)', 'descendant::*[1]'],
 	[':eq(1)', 'descendant::*[2]'],
-	[':eq(-1)', 'descendant::*[last()-0]'],
+	[':eq(-1)', 'descendant::*[last()]'],
 	[':eq(-2)', 'descendant::*[last()-1]'],
 	[':lt(0)', 'descendant::*[position()<1]'],
 	[':lt(1)', 'descendant::*[position()<2]'],
