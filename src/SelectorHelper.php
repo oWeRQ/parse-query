@@ -95,11 +95,13 @@ class SelectorHelper
 		$selector = preg_replace_callback("/$pattern/", function($match) use(&$holders){
 			list(, $func, $value) = $match + array_fill(0, 3, null);
 
-			if ($func === 'not') $cond = "[$func(".static::toXPath($value, 'self::').")]";
-			elseif ($func === 'has') $cond = "[".static::toXPath($value, 'descendant::')."]";
-			elseif ($func === 'eq') $cond = "[".($value + 1)."]";
-			elseif ($func === 'contains') $cond = "[$func(text(),$value)]";
-			else $cond = "[$func($value)]";
+			if ($func === 'not') $cond = '[not('.static::toXPath($value, 'self::').')]';
+			elseif ($func === 'has') $cond = '['.static::toXPath($value, 'descendant::').']';
+			elseif ($func === 'eq') $cond = '['.($value < 0 ? 'last()-' : '').abs($value + 1).']';
+			elseif ($func === 'lt') $cond = '[position()'.($value < 0 ? '-last()' : '').'<'.($value + 1).']';
+			elseif ($func === 'gt') $cond = '[position()'.($value < 0 ? '-last()' : '').'>'.($value + 1).']';
+			elseif ($func === 'contains') $cond = '[contains(text(),'.$value.')]';
+			else $cond = '['.$func.'('.$value.')]';
 
 			$holder = '{'.count($holders).'}';
 			$holders[$holder] = $cond;
