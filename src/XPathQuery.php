@@ -43,7 +43,9 @@ class XPathQuery implements \IteratorAggregate, \Countable
 			$this->nodes = $nodes->get();
 		} elseif ($nodes instanceof \DOMNode) {
 			$this->nodes = [$nodes];
-		} elseif (is_array($nodes) || $nodes instanceof \DOMNodeList) {
+		} elseif ($nodes instanceof \DOMNodeList) {
+			$this->nodes = iterator_to_array($nodes, false);
+		} elseif (is_array($nodes)) {
 			$uniqueNodes = [];
 
 			foreach ($nodes as $node) {
@@ -181,7 +183,7 @@ class XPathQuery implements \IteratorAggregate, \Countable
 			if (property_exists($node, $name))
 				return $node->$name;
 
-			if ($node->hasAttribute($name))
+			if ($node instanceof \DOMElement && $node->hasAttribute($name))
 				return $node->getAttribute($name);
 		}
 

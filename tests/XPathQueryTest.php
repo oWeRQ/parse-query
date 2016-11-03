@@ -18,7 +18,22 @@ class XPathQueryTest extends TestCase
 		$doc = new \DOMDocument();
 		$doc->loadHTMLFile(__DIR__.'/fixtures/page1.html');
 
-		return new XPathQuery($doc);
+		$queryFromDoc = new XPathQuery($doc);
+
+		$queryFromQuery = new XPathQuery($queryFromDoc);
+		$this->assertSame($queryFromDoc->documentElement, $queryFromQuery->documentElement);
+		$this->assertNotSame($queryFromDoc, $queryFromQuery);
+
+		$queryFromNode = new XPathQuery($doc->documentElement);
+		$this->assertSame('html', $queryFromNode->tagName);
+
+		$queryFromNodeArray = new XPathQuery([$doc->documentElement]);
+		$this->assertSame('html', $queryFromNodeArray->tagName);
+
+		$queryFromNodeList = new XPathQuery($doc->getElementsByTagName('html'));
+		$this->assertSame('html', $queryFromNodeList->tagName);
+
+		return $queryFromDoc;
 	}
 
 	/**
