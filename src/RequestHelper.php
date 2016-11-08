@@ -20,6 +20,16 @@ class RequestHelper
 			return $headers;
 
 		$headers = array_map(function($key, $value){
+			if (is_array($value)) {
+				$headers = [];
+
+				foreach ($value as $headerValue) {
+					$headers[] = $key.': '.$headerValue;
+				}
+			
+				return implode("\r\n", $headers);
+			}
+
 			return is_int($key) ? $value : $key.': '.$value;
 		}, array_keys($headers), $headers);
 

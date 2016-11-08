@@ -19,7 +19,7 @@ class RequestHelperTest extends TestCase
 	 */
 	public function testBuildHeaders($headers)
 	{
-		$this->assertEquals("ContentType: application/json\r\nContent-Length: 0", RequestHelper::buildHeaders($headers));
+		$this->assertEquals("HTTP/1.1 200 OK\r\nContentType: application/json\r\nContent-Length: 0\r\nContent-Length: 100", RequestHelper::buildHeaders($headers));
 	}
 
 	/**
@@ -31,7 +31,7 @@ class RequestHelperTest extends TestCase
 	 */
 	public function testParseHeaders($headers)
 	{
-		$this->assertEquals(["ContentType" => "application/json", "Content-Length" => 0], RequestHelper::parseHeaders($headers));
+		$this->assertEquals(["HTTP/1.1 200 OK", "ContentType" => "application/json", "Content-Length" => [0, 100]], RequestHelper::parseHeaders($headers));
 	}
 
 	/**
@@ -42,9 +42,9 @@ class RequestHelperTest extends TestCase
 	public function headersProvider()
 	{
 		return [
-			[["ContentType" => "application/json", "Content-Length" => 0]],
-			[["ContentType: application/json", "Content-Length: 0"]],
-			["ContentType: application/json\r\nContent-Length: 0"],
+			[["HTTP/1.1 200 OK", "ContentType" => "application/json", "Content-Length" => [0, 100]]],
+			[["HTTP/1.1 200 OK", "ContentType: application/json", "Content-Length: 0", "Content-Length: 100"]],
+			["HTTP/1.1 200 OK\r\nContentType: application/json\r\nContent-Length: 0\r\nContent-Length: 100"],
 		];
 	}
 
@@ -148,6 +148,29 @@ class RequestHelperTest extends TestCase
 			'contentType' => 'application/json',
 			'charset' => 'UTF-8',
 			'json' => ['foo' => 'bar'],
+		], $response);
+
+		$response = RequestHelper::processResponse([
+			'headers' => [
+				0 => 'HTTP/1.1 200 OK',
+				'Content-Type' => [
+					'application/json; charset=iso-8859-1',
+					'application/json; charset=UTF-8',
+				],
+			],
+			'text' => '{"foo":"bar"}',
+		], [
+			'contentType' => 'text/plain',
+			'charset' => 'windows-1251',
+		]);
+
+		$this->assertEquals([
+			'headers' => ['Content-Type' => 'application/json; charset=UTF-8'],
+			'text' => '{"foo":"bar"}',
+			'status' => '200',
+			'statusText' => 'OK',
+			'contentType' => 'text/plain',
+			'charset' => 'windows-1251',
 		], $response);
 	}
 
