@@ -84,7 +84,7 @@ class SelectorHelper
 	 * Replace with holders pseudo
 	 *
 	 * @param string $selector CSS Selector
-	 * @param string[string] $holders Holders array
+	 * @param string[] $holders Holders array
 	 *
 	 * @return string
 	 */
@@ -119,7 +119,7 @@ class SelectorHelper
 	 * Replace with holders conditions
 	 *
 	 * @param string $selector CSS Selector
-	 * @param string[string] $holders Holders array
+	 * @param string[] $holders Holders array
 	 *
 	 * @return string
 	 */

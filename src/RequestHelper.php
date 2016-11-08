@@ -10,7 +10,7 @@ class RequestHelper
 	/**
 	 * Build headers to string
 	 *
-	 * @param string|string[int]|string[string] $headers String or string-array or hash-array
+	 * @param string|string[] $headers String or string-array or hash-array
 	 *
 	 * @return string
 	 */
@@ -37,9 +37,9 @@ class RequestHelper
 	 * Output:
 	 * ['Content-Type' => ['text/plain', 'text/html']]
 	 *
-	 * @param string|string[int]|string[string] $rawHeaders String or string-array or hash-array
+	 * @param string|string[] $rawHeaders String or string-array or hash-array
 	 *
-	 * @return (string|string[int])[string]
+	 * @return mixed[]
 	 */
 	public static function parseHeaders($rawHeaders)
 	{
@@ -165,7 +165,7 @@ class RequestHelper
 	 * @param string $url Request url or file path
 	 * @param array $contextOptions Options for stream_context_create()
 	 *
-	 * @return mixed[string]
+	 * @return mixed[]
 	 */
 	public static function getContents($url, array $contextOptions = [])
 	{
@@ -184,7 +184,7 @@ class RequestHelper
 	 * @param array $response Has keys: string text, array error, array headers
 	 * @param array $options Fetch-like options
 	 *
-	 * @return mixed[string]
+	 * @return mixed[]
 	 */
 	public static function processResponse(array $response, array $options = [])
 	{
