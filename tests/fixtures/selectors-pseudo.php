@@ -20,4 +20,5 @@ return [
 	[':not(:has(b))', 'descendant::*[not(self::*[descendant::b])]'],
 	[':has(:not(b))', 'descendant::*[descendant::*[not(self::b)]]'],
 	[':not(a):has(b)', 'descendant::*[not(self::a)][descendant::b]'],
+	[':last()', 'descendant::*[last()]'],
 ];

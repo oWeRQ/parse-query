@@ -148,5 +148,6 @@ class XPathQueryTest extends TestCase
 	{
 		$this->assertSame("sublink1.1", $queries['anchors']->textContent);
 		$this->assertSame("#1.1", $queries['anchors']->href);
+		$this->assertNull($queries['anchors']->undef);
 	}
 }

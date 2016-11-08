@@ -90,11 +90,21 @@ class DOMHelperTest extends TestCase
 		// Load new document
 		$xpath = $this->testHtmlXPath();
 
+		$doc = $xpath->document;
 		$list = $xpath->query('descendant::div[@id="list"]')->item(0);
 
 		$html = '<b>hello<br>world</b>';
-		DOMHelper::setInnerHtml($list, $html);
+
+		$result = DOMHelper::setInnerHtml($list, $html);
 		$this->assertEquals($html, DOMHelper::innerHtml($list));
+
+		$result = DOMHelper::setInnerHtml($list, '<#not valid');
+		$this->assertFalse($result);
+		$this->assertEmpty(DOMHelper::innerHtml($list));
+
+		$result = DOMHelper::setInnerHtml($doc, $html);
+		$body = $doc->getElementsByTagName('body')->item(0);
+		$this->assertEquals($html, DOMHelper::innerHtml($body));
 	}
 
 	/**

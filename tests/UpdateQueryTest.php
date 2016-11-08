@@ -92,4 +92,15 @@ class UpdateQueryTest extends TestCase
 		$form->remove();
 		$this->assertCount(0, $form->parent());
 	}
+
+
+	/**
+	 * Test call
+	 *
+	 * @depends	testFetch
+	 */
+	public function testCall(UpdateQuery $form)
+	{
+		$form->undefinedMethod();
+	}
 }
