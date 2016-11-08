@@ -94,9 +94,7 @@ class DOMHelper
 		} else {
 			$doc = new \DOMDocument();
 
-			if (@$doc->loadHTML($value)) {
-				$body = $doc->getElementsByTagName('body')->item(0);
-				
+			if (@$doc->loadHTML($value) && $body = $doc->getElementsByTagName('body')->item(0)) {
 				foreach ($body->childNodes as $child) {
 					$node->appendChild($node->ownerDocument->importNode($child, true));
 				}
