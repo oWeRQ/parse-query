@@ -16,11 +16,13 @@ class DOMHelperTest extends TestCase
 	public function testHtmlXPath()
 	{
 		$html = file_get_contents(__DIR__.'/fixtures/page1.html');
-		$xpath = DOMHelper::htmlXPath($html);
 
-		$this->assertInstanceOf(\DOMXPath::class, $xpath);
+		$html = mb_convert_encoding($html, 'html-entities', 'utf-8');
 
-		return $xpath;
+		$doc = new \DOMDocument();
+		$doc->loadHTML($html);
+
+		return new \DOMXPath($doc);
 	}
 
 	/**

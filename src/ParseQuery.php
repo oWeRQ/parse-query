@@ -23,19 +23,6 @@ class ParseQuery extends XPathQuery
 	}
 
 	/**
-	 * Load html string
-	 *
-	 * @param string $html
-	 *
-	 * @return self
-	 */
-	public static function loadHtml($html)
-	{
-		$xpath = DOMHelper::htmlXPath($html);
-		return new static($xpath->document, $xpath);
-	}
-
-	/**
 	 * Find descendants match selector of each
 	 *
 	 * @param string $selector CSS Selector

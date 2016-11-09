@@ -8,26 +8,6 @@ namespace Parse;
 class DOMHelper
 {
 	/**
-	 * Load HTML and return DOMXPath
-	 *
-	 * @param string $html Html
-	 * @param boolean $isUtf8 Is convert utf8 to html entities
-	 *
-	 * @return \DOMXPath
-	 */
-	public static function htmlXPath($html, $isUtf8 = true)
-	{
-		if ($isUtf8) {
-			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-		}
-		
-		$doc = new \DOMDocument();
-		@$doc->loadHTML($html);
-
-		return new \DOMXPath($doc);
-	}
-
-	/**
 	 * Get outer HTML
 	 *
 	 * @param DOMNode $node Element or text node or document

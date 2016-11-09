@@ -65,6 +65,24 @@ class XPathQuery implements \IteratorAggregate, \Countable
 	}
 
 	/**
+	 * Load html string
+	 *
+	 * @param string $html
+	 * @param string $encoding
+	 *
+	 * @return self
+	 */
+	public static function loadHtml($html, $encoding = 'utf-8')
+	{
+		$html = mb_convert_encoding($html, 'html-entities', $encoding);
+
+		$doc = new \DOMDocument();
+		@$doc->loadHTML($html);
+
+		return new static($doc);
+	}
+
+	/**
 	 * Get nodes count
 	 * 
 	 * @return int
