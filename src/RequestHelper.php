@@ -245,35 +245,19 @@ class RequestHelper
 	 */
 	public static function fetch($url, array $options = [])
 	{
-		$response = [
-			'error' => false,
-			'status' => false,
-			'statusText' => false,
-			'headers' => [],
-			'contentType' => false,
-			'charset' => false,
-			'text' => false,
-			'json' => false,
-		];
-
-		$cache = (isset($options['cache']) ? $options['cache'] : 'default');
-		unset($options['cache']);
-
-		$name = md5($url).'.'.md5(json_encode($options));
-		if (($responseCache = static::cacheGet($name, $cache)) !== false) {
-			return (object)array_merge($response, (array)$responseCache);
-		}
-
 		$contextOptions = static::contextOptions($options);
 
-		$response = array_merge($response, static::getContents($url, $contextOptions));
+		$cacheName = md5($url).'.'.md5(json_encode($contextOptions));
+		$cacheType = (isset($options['cache']) ? $options['cache'] : 'default');
 
-		$response = static::processResponse($response, $options);
+		if (($response = static::cacheGet($cacheName, $cacheType)) === false) {
+			$response = static::getContents($url, $contextOptions);
 
-		if ($response['status'] !== false && $contextOptions['http']['method'] === 'GET') {
-			static::cachePut($name, $response, $cache);
+			if ($response['headers'] && $contextOptions['http']['method'] === 'GET') {
+				static::cachePut($cacheName, $response, $cacheType);
+			}
 		}
 
-		return (object)$response;
+		return (object)static::processResponse($response, $options);
 	}
 }
