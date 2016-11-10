@@ -84,6 +84,31 @@ class RequestHelper
 	}
 
 	/**
+	 * Parse Content-Type header
+	 *
+	 * @param mixed $header Content-Type header value string or array
+	 *
+	 * @return string[]
+	 */
+	public static function parseContentType($header)
+	{
+		if (is_array($header)) {
+			$header = end($header);
+		}
+
+		$result = [
+			'contentType' => null,
+			'charset' => null,
+		];
+
+		if (preg_match('/^([^;]+)(?:;\s*charset=([-\w]+))?/', $header, $matches)) {
+			list(, $result['contentType'], $result['charset']) = $matches + array_fill(0, 3, null);
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Get available to write dir for request cache
 	 *
 	 * @return string
@@ -203,17 +228,8 @@ class RequestHelper
 			list(, $response['status'], $response['statusText']) = $status;
 		}
 
-		if (isset($response['headers']['Content-Type']) && is_array($response['headers']['Content-Type'])) {
-			$response['headers']['Content-Type'] = end($response['headers']['Content-Type']);
-		}
-
-		if (isset($response['headers']['Content-Type']) && preg_match('/^([^;]+)(?:;\s*charset=([-\w]+))?/', $response['headers']['Content-Type'], $matches)) {
-			if (isset($matches[1])) {
-				$response['contentType'] = $matches[1];
-			}
-			if (isset($matches[2])) {
-				$response['charset'] = $matches[2];
-			}
+		if (isset($response['headers']['Content-Type'])) {
+			$response += static::parseContentType($response['headers']['Content-Type']);
 		}
 
 		if (isset($options['contentType'])) {

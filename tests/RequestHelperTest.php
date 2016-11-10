@@ -165,7 +165,10 @@ class RequestHelperTest extends TestCase
 		]);
 
 		$this->assertEquals([
-			'headers' => ['Content-Type' => 'application/json; charset=UTF-8'],
+			'headers' => ['Content-Type' => [
+				'application/json; charset=iso-8859-1',
+				'application/json; charset=UTF-8',
+			]],
 			'text' => '{"foo":"bar"}',
 			'status' => '200',
 			'statusText' => 'OK',
