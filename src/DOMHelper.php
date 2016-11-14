@@ -20,7 +20,7 @@ class DOMHelper
 			return $node->textContent;
 
 		if ($node instanceof \DOMDocument)
-			return $node->saveHTML();
+			return $node->saveHTML($node);
 
 		return $node->ownerDocument->saveHTML($node);
 	}
@@ -38,7 +38,7 @@ class DOMHelper
 			return $node->textContent;
 
 		if ($node instanceof \DOMDocument)
-			return $node->saveHTML();
+			return $node->saveHTML($node);
 
 		$html = '';
 
