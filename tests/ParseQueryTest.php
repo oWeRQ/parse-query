@@ -126,6 +126,9 @@ class ParseQueryTest extends TestCase
 		$this->assertCount(2, $results->items->prev('.item'));
 		$this->assertCount(1, $results->items->prev('.item1'));
 		$this->assertCount(0, $results->items->prev('.item3'));
+		$this->assertCount(0, $results->items->eq(0)->prev());
+		$this->assertCount(1, $results->items->eq(1)->prev());
+		$this->assertCount(1, $results->items->eq(2)->prev());
 	}
 
 	/**
@@ -141,6 +144,46 @@ class ParseQueryTest extends TestCase
 		$this->assertCount(2, $results->items->next('.item'));
 		$this->assertCount(0, $results->items->next('.item1'));
 		$this->assertCount(1, $results->items->next('.item3'));
+		$this->assertCount(1, $results->items->eq(0)->next());
+		$this->assertCount(1, $results->items->eq(1)->next());
+		$this->assertCount(0, $results->items->eq(2)->next());
+	}
+
+
+	/**
+	 * Test prev all
+	 *
+	 * @depends testFind
+	 */
+	public function testPrevAll($results)
+	{
+		$this->assertCount(0, $results->anchor->prevAll());
+		$this->assertCount(0, $results->anchor->prevAll('small'));
+		$this->assertCount(2, $results->items->prevAll());
+		$this->assertCount(2, $results->items->prevAll('.item'));
+		$this->assertCount(1, $results->items->prevAll('.item1'));
+		$this->assertCount(0, $results->items->prevAll('.item3'));
+		$this->assertCount(0, $results->items->eq(0)->prevAll());
+		$this->assertCount(1, $results->items->eq(1)->prevAll());
+		$this->assertCount(2, $results->items->eq(2)->prevAll());
+	}
+
+	/**
+	 * Test next all
+	 *
+	 * @depends testFind
+	 */
+	public function testNextAll($results)
+	{
+		$this->assertCount(3, $results->anchor->nextAll());
+		$this->assertCount(3, $results->anchor->nextAll('small'));
+		$this->assertCount(2, $results->items->nextAll());
+		$this->assertCount(2, $results->items->nextAll('.item'));
+		$this->assertCount(0, $results->items->nextAll('.item1'));
+		$this->assertCount(1, $results->items->nextAll('.item3'));
+		$this->assertCount(2, $results->items->eq(0)->nextAll());
+		$this->assertCount(1, $results->items->eq(1)->nextAll());
+		$this->assertCount(0, $results->items->eq(2)->nextAll());
 	}
 
 	/**

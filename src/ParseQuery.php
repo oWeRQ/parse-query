@@ -91,7 +91,7 @@ class ParseQuery extends XPathQuery
 	 */
 	public function parent($selector = null)
 	{
-		return ($selector ? $this->xpath(SelectorHelper::toXPath($selector, 'parent::')) : parent::parent());
+		return $this->xpath(SelectorHelper::toXPath($selector, 'parent::'));
 	}
 
 	/**
@@ -103,7 +103,7 @@ class ParseQuery extends XPathQuery
 	 */
 	public function prev($selector = null)
 	{
-		return ($selector ? $this->xpath(SelectorHelper::toXPath($selector, 'preceding-sibling::*[1]/self::')) : parent::prev());
+		return $this->xpath(SelectorHelper::toXPath($selector, 'preceding-sibling::*[1]/self::'));
 	}
 
 	/**
@@ -115,7 +115,31 @@ class ParseQuery extends XPathQuery
 	 */
 	public function next($selector = null)
 	{
-		return ($selector ? $this->xpath(SelectorHelper::toXPath($selector, 'following-sibling::*[1]/self::')) : parent::next());
+		return $this->xpath(SelectorHelper::toXPath($selector, 'following-sibling::*[1]/self::'));
+	}
+
+	/**
+	 * Previous all siblings of each
+	 *
+	 * @param string $selector CSS Selector
+	 *
+	 * @return self
+	 */
+	public function prevAll($selector = null)
+	{
+		return $this->xpath(SelectorHelper::toXPath($selector, 'preceding-sibling::'));
+	}
+
+	/**
+	 * Next all siblings of each
+	 *
+	 * @param string $selector CSS Selector
+	 *
+	 * @return self
+	 */
+	public function nextAll($selector = null)
+	{
+		return $this->xpath(SelectorHelper::toXPath($selector, 'following-sibling::'));
 	}
 
 	/**
