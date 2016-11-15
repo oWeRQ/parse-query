@@ -140,6 +140,46 @@ class XPathQueryTest extends TestCase
 	}
 
 	/**
+	 * Test parent
+	 *
+	 * @depends testXpath
+	 */
+	public function testParent($queries)
+	{
+		extract($queries);
+		$this->assertSame($smalls->get(), $anchors->parent()->get());
+		$this->assertCount(3, $anchors->parent());
+		$this->assertCount(3, $smalls->parent());
+		$this->assertCount(1, $smalls->parent()->parent());
+	}
+
+	/**
+	 * Test prev
+	 *
+	 * @depends testXpath
+	 */
+	public function testPrev($queries)
+	{
+		extract($queries);
+		$this->assertCount(0, $anchors->prev());
+		$this->assertCount(3, $smalls->prev());
+		$this->assertCount(2, $smalls->parent()->prev());
+	}
+
+	/**
+	 * Test next
+	 *
+	 * @depends testXpath
+	 */
+	public function testNext($queries)
+	{
+		extract($queries);
+		$this->assertCount(0, $anchors->next());
+		$this->assertCount(0, $smalls->next());
+		$this->assertCount(2, $smalls->parent()->next());
+	}
+
+	/**
 	 * Test __get method
 	 *
 	 * @depends testXpath

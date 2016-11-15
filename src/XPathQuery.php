@@ -16,22 +16,6 @@ class XPathQuery implements \IteratorAggregate, \Countable
 	private $xpath = null;
 
 	/**
-	 * Get interator with self objects per node
-	 *
-	 * @return \ArrayIterator
-	 */
-	public function getIterator()
-	{
-		$nodes = [];
-
-		foreach ($this->nodes as $node) {
-			$nodes[] = new static($node, $this->xpath);
-		}
-
-		return new \ArrayIterator($nodes);
-	}
-
-	/**
 	 * Constructor
 	 *
 	 * @param self|\DOMNode|\DOMNode[]|\DOMNodeList $nodes
@@ -80,6 +64,22 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		@$doc->loadHTML($html);
 
 		return new static($doc);
+	}
+
+	/**
+	 * Get interator with self objects per node
+	 *
+	 * @return \ArrayIterator
+	 */
+	public function getIterator()
+	{
+		$nodes = [];
+
+		foreach ($this->nodes as $node) {
+			$nodes[] = new static($node, $this->xpath);
+		}
+
+		return new \ArrayIterator($nodes);
 	}
 
 	/**
@@ -186,6 +186,48 @@ class XPathQuery implements \IteratorAggregate, \Countable
 		restore_error_handler();
 
 		return $result;
+	}
+
+	/**
+	 * Parent of each
+	 *
+	 * @return self
+	 */
+	public function parent()
+	{
+		return $this->map(function($node){
+			return $node->parentNode;
+		});
+	}
+
+	/**
+	 * Previous sibling of each
+	 *
+	 * @return self
+	 */
+	public function prev()
+	{
+		return $this->map(function($node){
+			while ($node = $node->previousSibling) {
+				if ($node->nodeType !== XML_TEXT_NODE)
+					return $node;
+			}
+		});
+	}
+
+	/**
+	 * Next sibling of each
+	 *
+	 * @return self
+	 */
+	public function next()
+	{
+		return $this->map(function($node){
+			while ($node = $node->nextSibling) {
+				if ($node->nodeType !== XML_TEXT_NODE)
+					return $node;
+			}
+		});
 	}
 
 	/**

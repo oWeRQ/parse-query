@@ -85,43 +85,37 @@ class ParseQuery extends XPathQuery
 	/**
 	 * Parent of each
 	 *
+	 * @param string $selector CSS Selector
+	 *
 	 * @return self
 	 */
-	public function parent()
+	public function parent($selector = null)
 	{
-		return $this->map(function($node){
-			return $node->parentNode;
-		});
+		return ($selector ? $this->xpath(SelectorHelper::toXPath($selector, 'parent::')) : parent::parent());
 	}
 
 	/**
 	 * Previous sibling of each
 	 *
+	 * @param string $selector CSS Selector
+	 *
 	 * @return self
 	 */
-	public function prev()
+	public function prev($selector = null)
 	{
-		return $this->map(function($node){
-			while ($node = $node->previousSibling) {
-				if ($node->nodeType !== XML_TEXT_NODE)
-					return $node;
-			}
-		});
+		return ($selector ? $this->xpath(SelectorHelper::toXPath($selector, 'preceding-sibling::*[1]/self::')) : parent::prev());
 	}
 
 	/**
 	 * Next sibling of each
 	 *
+	 * @param string $selector CSS Selector
+	 *
 	 * @return self
 	 */
-	public function next()
+	public function next($selector = null)
 	{
-		return $this->map(function($node){
-			while ($node = $node->nextSibling) {
-				if ($node->nodeType !== XML_TEXT_NODE)
-					return $node;
-			}
-		});
+		return ($selector ? $this->xpath(SelectorHelper::toXPath($selector, 'following-sibling::*[1]/self::')) : parent::next());
 	}
 
 	/**

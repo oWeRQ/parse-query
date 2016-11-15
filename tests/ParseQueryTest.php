@@ -104,7 +104,13 @@ class ParseQueryTest extends TestCase
 	public function testParent($results)
 	{
 		$this->assertCount(1, $results->items->parent());
+		$this->assertCount(1, $results->items->parent('#list'));
+		$this->assertCount(0, $results->items->parent('#other'));
+		$this->assertCount(0, $results->items->parent('.item'));
 		$this->assertCount(6, $results->anchor->parent());
+		$this->assertCount(3, $results->anchor->parent('small'));
+		$this->assertCount(3, $results->anchor->parent('.item'));
+		$this->assertCount(0, $results->anchor->parent('#list'));
 	}
 
 	/**
@@ -115,7 +121,11 @@ class ParseQueryTest extends TestCase
 	public function testPrev($results)
 	{
 		$this->assertCount(0, $results->anchor->prev());
+		$this->assertCount(0, $results->anchor->prev('small'));
 		$this->assertCount(2, $results->items->prev());
+		$this->assertCount(2, $results->items->prev('.item'));
+		$this->assertCount(1, $results->items->prev('.item1'));
+		$this->assertCount(0, $results->items->prev('.item3'));
 	}
 
 	/**
@@ -126,7 +136,11 @@ class ParseQueryTest extends TestCase
 	public function testNext($results)
 	{
 		$this->assertCount(3, $results->anchor->next());
+		$this->assertCount(3, $results->anchor->next('small'));
 		$this->assertCount(2, $results->items->next());
+		$this->assertCount(2, $results->items->next('.item'));
+		$this->assertCount(0, $results->items->next('.item1'));
+		$this->assertCount(1, $results->items->next('.item3'));
 	}
 
 	/**
