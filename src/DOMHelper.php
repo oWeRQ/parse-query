@@ -121,20 +121,26 @@ class DOMHelper
 	/**
 	 * Printable node representation
 	 *
-	 * @param DOMElement $node
+	 * @param DOMNode $node
 	 *
 	 * @return string
 	 */
-	public static function nodeToString(\DOMElement $node)
+	public static function nodeToString(\DOMNode $node)
 	{
-		$id = $node->getAttribute('id');
-		$class = $node->getAttribute('class');
-		$text = trim(preg_replace('/\s+/', ' ', $node->textContent)) ?: $node->getAttribute('value');
+		$text = trim(preg_replace('/\s+/', ' ', $node->textContent));
+
+		if ($node instanceof \DOMElement) {
+			$id = $node->getAttribute('id');
+			$class = $node->getAttribute('class');
+			$text = $text ?: $node->getAttribute('value');
+		} else {
+			$id = $class = null;
+		}
 
 		if (strlen($text) > 10) {
 			$text = substr($text, 0, 10).'...';
 		}
 
-		return $node->tagName.($id ? '#'.$id : '').($class ? '.'.str_replace(' ', '.', $class) : '').($text ? '{'.$text.'}' : '');
+		return str_replace('#', '@', $node->nodeName).($id ? '#'.$id : '').($class ? '.'.str_replace(' ', '.', $class) : '').($text ? '{'.$text.'}' : '');
 	}
 }

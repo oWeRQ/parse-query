@@ -147,6 +147,8 @@ class DOMHelperTest extends TestCase
 	 */
 	public function testNodeToString(\DOMXPath $xpath)
 	{
+		$this->assertEquals('@document{page1 link...}', DOMHelper::nodeToString($xpath->document));
+
 		$submit = $xpath->query('descendant::input[@type="submit"]')->item(0);
 		$this->assertEquals('input{Search}', DOMHelper::nodeToString($submit));
 
@@ -155,6 +157,9 @@ class DOMHelperTest extends TestCase
 
 		$item1 = $xpath->query('descendant::span[@class="item item1"]')->item(0);
 		$this->assertEquals('span.item.item1{link1 subl...}', DOMHelper::nodeToString($item1));
+
+		$titleText = $xpath->query('descendant::title/text()')->item(0);
+		$this->assertEquals('@text{page1}', DOMHelper::nodeToString($titleText));
 	}
 }
 
