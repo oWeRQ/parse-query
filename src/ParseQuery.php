@@ -55,7 +55,7 @@ class ParseQuery extends XPathQuery
 	 */
 	public function children($selector = null)
 	{
-		return $this->xpath($selector ? SelectorHelper::toXPath($selector, '') : '*');
+		return $this->xpath(SelectorHelper::toXPath($selector, ''));
 	}
 
 	/**
@@ -79,7 +79,7 @@ class ParseQuery extends XPathQuery
 	 */
 	public function parents($selector = null)
 	{
-		return $this->xpath($selector ? SelectorHelper::toXPath($selector, 'ancestor::') : 'ancestor::*');
+		return $this->xpath(SelectorHelper::toXPath($selector, 'ancestor::'));
 	}
 
 	/**
