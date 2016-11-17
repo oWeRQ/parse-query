@@ -95,13 +95,15 @@ class SelectorHelper
 		$selector = preg_replace_callback("/$pattern/", function($match) use(&$holders){
 			list(, $func, $value) = $match + array_fill(0, 3, null);
 
-			if ($func === 'not') $cond = '[not('.static::toXPath($value, 'self::').')]';
-			elseif ($func === 'has') $cond = '['.static::toXPath($value, 'descendant::').']';
-			elseif ($func === 'eq') $cond = '['.($value < 0 ? 'last()' : '').($value + 1 ?: '').']';
-			elseif ($func === 'lt') $cond = '[position()'.($value < 0 ? '-last()' : '').'<'.($value + 1).']';
-			elseif ($func === 'gt') $cond = '[position()'.($value < 0 ? '-last()' : '').'>'.($value + 1).']';
-			elseif ($func === 'contains') $cond = '[contains(text(),'.$value.')]';
-			else $cond = '['.$func.'('.$value.')]';
+			switch ($func) {
+				case 'not': $cond = '[not('.static::toXPath($value, 'self::').')]'; break;
+				case 'has': $cond = '['.static::toXPath($value, 'descendant::').']'; break;
+				case 'eq': $cond = '['.($value < 0 ? 'last()' : '').($value + 1 ?: '').']'; break;
+				case 'lt': $cond = '[position()'.($value < 0 ? '-last()' : '').'<'.($value + 1).']'; break;
+				case 'gt': $cond = '[position()'.($value < 0 ? '-last()' : '').'>'.($value + 1).']'; break;
+				case 'contains': $cond = '[contains(text(),'.$value.')]'; break;
+				default: $cond = '['.$func.'('.$value.')]';
+			}
 
 			$holder = '{'.count($holders).'}';
 			$holders[$holder] = $cond;
@@ -142,12 +144,14 @@ class SelectorHelper
 
 			$value = (strpos($value, '"') === false) ? '"'.$value.'"' : '\''.$value.'\'';
 
-			if ($op === null) $cond = "[$attr]";
-			elseif ($op === '=') $cond = "[$attr=$value]";
-			elseif ($op === '~=') $cond = "[contains(concat(' ',$attr,' '),concat(' ',$value,' '))]";
-			elseif ($op === '^=') $cond = "[starts-with($attr,$value)]";
-			elseif ($op === '$=') $cond = "[ends-with($attr,$value)]";
-			elseif ($op === '*=') $cond = "[contains($attr,$value)]";
+			switch ($op) {
+				case null: $cond = "[$attr]"; break;
+				case '=': $cond = "[$attr=$value]"; break;
+				case '~=': $cond = "[contains(concat(' ',$attr,' '),concat(' ',$value,' '))]"; break;
+				case '^=': $cond = "[starts-with($attr,$value)]"; break;
+				case '$=': $cond = "[ends-with($attr,$value)]"; break;
+				case '*=': $cond = "[contains($attr,$value)]"; break;
+			}
 
 			$holder = '{'.count($holders).'}';
 			$holders[$holder] = $cond;
