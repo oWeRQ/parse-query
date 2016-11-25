@@ -240,10 +240,6 @@ class RequestHelper
 			$response['charset'] = $options['charset'];
 		}
 
-		if (!empty($response['charset'])) {
-			$response['text'] = mb_convert_encoding($response['text'], mb_internal_encoding(), $response['charset']);
-		}
-
 		if (!empty($response['contentType']) && $response['contentType'] === 'application/json') {
 			$response['json'] = json_decode($response['text'], true);
 		}

@@ -56,12 +56,20 @@ class XPathQuery implements \IteratorAggregate, \Countable
 	 *
 	 * @return self
 	 */
-	public static function loadHtml($html, $encoding = 'utf-8')
+	public static function loadHtml($html, $encoding = 'utf-8', $forceEncoding = true)
 	{
-		$html = mb_convert_encoding($html, 'html-entities', $encoding);
+		$metaTag = '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'" />';
+		$html = ($forceEncoding ? $metaTag.$html : str_replace('</head>', $metaTag.'</head>', $html));
 
 		$doc = new \DOMDocument();
-		@$doc->loadHTML($html);
+		@$doc->loadHTML($html, LIBXML_HTML_NODEFDTD);
+
+		$metaNodes = $doc->getElementsByTagName('meta');
+
+		if ($metaNodes->length) {
+			$metaNode = $metaNodes->item($forceEncoding ? 0 : $metaNodes->length - 1);
+			$metaNode->parentNode->removeChild($metaNode);
+		}
 
 		return new static($doc);
 	}

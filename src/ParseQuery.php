@@ -19,7 +19,9 @@ class ParseQuery extends XPathQuery
 	 */
 	public static function fetch($url, array $options = [])
 	{
-		return static::loadHtml(RequestHelper::fetch($url, $options)->text);
+		$response = RequestHelper::fetch($url, $options);
+
+		return static::loadHtml($response->text, $response->charset, false);
 	}
 
 	/**
