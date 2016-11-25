@@ -238,6 +238,8 @@ class RequestHelper
 
 		if (isset($options['charset'])) {
 			$response['charset'] = $options['charset'];
+		} else {
+			$response['charset'] = mb_internal_encoding();
 		}
 
 		if (!empty($response['contentType']) && $response['contentType'] === 'application/json') {
